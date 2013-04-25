@@ -1,0 +1,10 @@
+.container {
+	width: auto;
+	max-width: 680px;
+}
+.page-header {
+	text-align: center;
+}
+.container .credit {
+	margin: 20px 0;
+}

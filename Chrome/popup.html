@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>MyPass</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- css -->
+	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<!-- <link href="Chrome/bootstrap-responsive.min.css" rel="stylesheet" media="screen"> -->
+	<link href="css/mypass.css" rel="stylesheet">
+	<!-- javascript -->
+	<script src="js/jquery-2.0.0.js"></script>
+	<script src="js/popup.js"></script>
+</head>
+<body>
+	<div id="content" class="container">
+		<form class="form-horizontal" id="emailpass">
+			<input type="text" class="input-medium" id="email" placeholder="Email">
+			<input type="text" class="input-medium" id="phrase" placeholder="Passphrase">
+			<button type="submit" class="btn" id="savekey">Save Derived Key</button>
+		</form>
+
+		<div id="siteinfo">
+			<label for="site">Site</label>
+			<input id="site" type="text" size="30">
+
+			<label for="username">Password</label>
+			<input id="username" type="text" size="30">
+		</div>
+
+		<div id="info"></div>
+	</div>
+</body>
+</html>
