@@ -1,14 +1,46 @@
-@passwdgen
+passwdgen = null
+itercnt = 1<<8 # TODO make it user specifiable
 
-saveKey = ->
+notify = (msg) ->
+	$('#notify').html(msg).show().hide(3000)
+
+save_key = ->
+	unless $('#emailpp').is ':visible'
+		$('#emailpp').show(200)
+		$('#savekey').html 'Save Derived Key'
+		return
 	email = $('#email').val()
 	pp = $('#pp').val()
-	@passwdgen = new window.PasswdGenerator(email, pp)
-	s = CryptoJS.enc.Base64.stringify(@passwdgen._key)
-	$('#info').html(s)
-	$('#savekey').html('Change Passphrase')
+	if email == '' or pp == ''
+		notify 'Both email and passphrase required.'
+		return
+	passwdgen = new window.PasswdGenerator(email, pp, itercnt)
+	$('#email').val ''
+	$('#pp').val ''
+	$('#savekey').html 'Change Passphrase'
+	$('#emailpp').hide(200)
+	# notify 'Key derived.'
+
+	s = CryptoJS.enc.Base64.stringify(passwdgen._key)
+	notify "derived key: " + s
+
+gen_passwd = ->
+	if passwdgen == null
+		$('#info').html 'key not derived'
+		return
+	# TODO make these use specifiable
+	p = passwdgen.generate {
+		site: $('#site').val()
+		generation: 0
+		num_symbols: 3
+		length: 12
+	}
+	$('#passwd').val p
+	$('#info').html ''
+	return
 
 # initialization
 $ ->
-	$('#savekey').on('click', saveKey)
+	$('#savekey').on 'click', save_key
+	$('#genpasswd').on 'click', gen_passwd
 	return

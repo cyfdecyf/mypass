@@ -12,6 +12,7 @@
 	<script src="js/crypto/components/core-min.js"></script>
 	<script src="js/crypto/components/enc-base64-min.js"></script>
 	<script src="js/crypto/rollups/sha512.js"></script>
+	<script src="js/crypto/rollups/hmac-sha512.js"></script>
 	<script src="js/crypto/rollups/pbkdf2.js"></script>
 	<script src="js/passwdgen.js"></script>
 	<script src="js/standalone.js"></script>
@@ -32,8 +33,11 @@
 
 		<input type="text" class="input-large" id="site" placeholder="Site">
 		<input type="text" class="input-large" id="passwd" placeholder="Generated Password">
+		<p>
+			<button class="btn" id="genpasswd" type="button">Generate Password</button>
+		</p>
 
-		<div id="info"></div>
+		<div id="notify"></div>
 	</div>
 </body>
 </html>
