@@ -2,7 +2,7 @@ passwdgen = null
 itercnt = 1<<8 # TODO make it user specifiable
 
 notify = (msg) ->
-	$('#notify').html(msg).show().hide(3000)
+	$('#content').append('<p>' + msg + '</p>')
 
 save_key = ->
 	unless $('#emailpp').is ':visible'
@@ -25,8 +25,11 @@ save_key = ->
 	notify "derived key: " + s
 
 gen_passwd = ->
+	if $('#site').val() == ''
+		$('#passwd').val ''
+		return
 	if passwdgen == null
-		$('#info').html 'key not derived'
+		notify 'key not derived'
 		return
 	# TODO make these use specifiable
 	p = passwdgen.generate {
@@ -36,11 +39,10 @@ gen_passwd = ->
 		length: 12
 	}
 	$('#passwd').val p
-	$('#info').html ''
 	return
 
 # initialization
 $ ->
 	$('#savekey').on 'click', save_key
-	$('#genpasswd').on 'click', gen_passwd
+	$('#site').on 'input', gen_passwd
 	return
