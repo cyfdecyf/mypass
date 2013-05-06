@@ -4,14 +4,20 @@ config =
 	pw: { min_size: 8, max_size: 16 }
 
 class PasswdGenerator
-	constructor: (@email, passphrase, itercnt) ->
-		# TODO If localStorage has stored key, no need to generate again
-		@_key = @derive(@email, passphrase)
+	constructor: (@email, passphrase, itercnt, derived_key) ->
+		# FIXME relying on parameter to have different behavior is ugly
+		if derived_key?
+			@derived_key = derived_key
+		else
+			@derived_key = @derive(@email, passphrase)
 
 	derive: (email, passphrase, itercnt) ->
 		# TODO check if the derived key is the same as 1SP
-		C.PBKDF2 passphrase, email,
+		# what should be used as the key to HmacSHA512?
+		# note the key need to be stored in localStorage
+		k = C.PBKDF2 passphrase, email,
 			{ keySize: 512/32, iterations: itercnt, hasher: C.algo.SHA512 }
+		@derived_key = CryptoJS.enc.Base64.stringify k
 
 	# passwd should contain following property
 	#     site, generation, num_symbols, length
@@ -20,9 +26,9 @@ class PasswdGenerator
 		ret = null
 		tmpl = [ "OneShallPass v2.0", @email, passwd.site, passwd.generation ].join ""
 		until ret
-			# TODO 1SP uses purepack to concatenate strings
+			# TODO 1SP uses purepack to concatenate strings, make it compatible with 1SP
 			a = tmpl.concat i.toString()
-			hash = C.HmacSHA512 a, @_key
+			hash = C.HmacSHA512 a, @derived_key
 			b64 = hash.toString C.enc.Base64
 			ret = b64 if @is_ok_pw b64
 			i++

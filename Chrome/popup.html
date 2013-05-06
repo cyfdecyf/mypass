@@ -8,26 +8,38 @@
 	<!-- <link href="Chrome/bootstrap-responsive.min.css" rel="stylesheet" media="screen"> -->
 	<link href="css/mypass.css" rel="stylesheet">
 	<!-- javascript -->
-	<script src="js/jquery-2.0.0.js"></script>
+	<script src="js/jquery.js"></script>
+	<script src="js/cryptojs/components/core-min.js"></script>
+	<script src="js/cryptojs/components/enc-base64-min.js"></script>
+	<script src="js/cryptojs/rollups/sha512.js"></script>
+	<script src="js/cryptojs/rollups/hmac-sha512.js"></script>
+	<script src="js/cryptojs/rollups/pbkdf2.js"></script>
+	<script src="js/passwdgen.js"></script>
+	<script src="js/ui.js"></script>
 	<script src="js/popup.js"></script>
 </head>
 <body>
 	<div id="content" class="container">
-		<form class="form-horizontal" id="emailpass">
-			<input type="text" class="input-medium" id="email" placeholder="Email">
-			<input type="text" class="input-medium" id="phrase" placeholder="Passphrase">
-			<button type="submit" class="btn" id="savekey">Save Derived Key</button>
-		</form>
-
-		<div id="siteinfo">
-			<label for="site">Site</label>
-			<input id="site" type="text" size="30">
-
-			<label for="username">Password</label>
-			<input id="username" type="text" size="30">
+		<div id="emailpp">
+			<input type="text" class="input-large" id="email" placeholder="Email">
+			<input type="password" class="input-large" id="pp" placeholder="Passphrase">
 		</div>
+		<p>
+			<button class="btn" id="savekey" type="button">Save Derived Key</button>
+		</p>
+
+		<label for="site">Site</label>
+		<input type="text" class="input-large" id="site" placeholder="Site">
+		<label for="passwd">Generated Password</label>
+		<input type="text" class="input-large" id="passwd" placeholder="Generated Password" readonly>
+
+		<label class="checkbox"> <input type="checkbox" id="dbg"> Show debug message </label>
 
 		<div id="info"></div>
+		<div id="dbginfo"></div>
+
+		<!-- for js to find whether it's running as chrome extension -->
+		<div id="chromeext" class="hide"></div>
 	</div>
 </body>
 </html>
