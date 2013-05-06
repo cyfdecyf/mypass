@@ -16,7 +16,7 @@ init = ->
 	ui_init()
 	# $("#info").val(window.location.search.substring(1))
 	callOnActivePage((tab) ->
-		$('#site').val(tab.url)
+		$('#site').val(parse_site tab.url)
 		gen_passwd()
 		return
 	)
