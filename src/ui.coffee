@@ -33,7 +33,7 @@ gather_input = ->
 		passphrase: $('#passphrase').val()
 		itercnt: 1 << Number($('#hashes').val())
 		site: $('#site').val()
-		generation: Number($('#generation').val())
+		generation: $('#generation').val()
 		num_symbol: Number($('#num_symbol').val())
 		length: Number($('#length').val())
 		compute_hook: derive_key_compute_hook
