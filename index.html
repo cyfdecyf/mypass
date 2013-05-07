@@ -24,19 +24,13 @@
 			<h1>Own Your Password</h1>
 		</div>
 
-		<div id="emailpp">
-			<!-- tabindex does not auto focus in Chrome when open as a web page -->
-			<input type="text" class="input-large" id="email" placeholder="Email" autofocus>
-			<input type="password" class="input-large" id="pp" placeholder="Passphrase">
-		</div>
+		<!-- tabindex does not auto focus in Chrome when open as a web page -->
+		<input type="text" class="input-large" id="email" placeholder="Email" autofocus>
+		<input type="password" class="input-large" id="passphrase" placeholder="Passphrase">
 		<label for="site">Site</label>
 		<input type="text" class="input-large" id="site" placeholder="Site">
 		<label for="passwd">Generated Password</label>
 		<input type="text" class="input-large" id="passwd" placeholder="Generated Password" readonly>
-
-		<p>
-			<button class="btn" id="savekey" type="button">Save Derived Key</button>
-		</p>
 
 		<label class="checkbox"> <input type="checkbox" id="dbg"> Show debug message </label>
 

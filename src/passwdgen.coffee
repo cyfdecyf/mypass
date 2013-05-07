@@ -4,36 +4,35 @@ config =
 	pw: { min_size: 8, max_size: 16 }
 
 class PasswdGenerator
-	constructor: (@email, passphrase, itercnt, derived_key) ->
-		# FIXME relying on parameter to have different behavior is ugly
-		if derived_key?
-			@derived_key = derived_key
-		else
-			@derived_key = @derive(@email, passphrase)
-
-	derive: (email, passphrase, itercnt) ->
-		# TODO check if the derived key is the same as 1SP
-		# what should be used as the key to HmacSHA512?
-		# note the key need to be stored in localStorage
-		k = C.PBKDF2 passphrase, email,
-			{ keySize: 512/32, iterations: itercnt, hasher: C.algo.SHA512 }
-		@derived_key = CryptoJS.enc.Base64.stringify k
-
-	# passwd should contain following property
-	#     site, generation, num_symbols, length
-	generate: (passwd) ->
+	# input should contain following property
+	#     site, generation, num_symbols, length, email, passphrase, itercnt
+	generate: (input) ->
+		dk = @derive_key(input.email, input.passphrase, input.itercnt)
 		i = 0
 		ret = null
-		tmpl = [ "OneShallPass v2.0", @email, passwd.site, passwd.generation ].join ""
+		tmpl = [ "OneShallPass v2.0", input.email, input.site, input.generation ].join ""
 		until ret
 			# TODO 1SP uses purepack to concatenate strings, make it compatible with 1SP
 			a = tmpl.concat i.toString()
-			hash = C.HmacSHA512 a, @derived_key
+			hash = C.HmacSHA512 a, dk
 			b64 = hash.toString C.enc.Base64
 			ret = b64 if @is_ok_pw b64
 			i++
-		x = @add_syms ret, passwd.num_symbols
-		x[0...passwd.length]
+		x = @add_syms ret, input.num_symbols
+		x[0...input.length]
+
+	derive_key: (email, passphrase, itercnt) ->
+		# TODO check if the derived key is the same as 1SP
+		# what should be used as the key to HmacSHA512?
+
+		# cache derived key for last email and passphrase pair
+		if @email == email && @passphrase == passphrase
+			return @key
+		@key = C.PBKDF2 passphrase, email,
+			{ keySize: 512/32, iterations: itercnt, hasher: C.algo.SHA512 }
+		@email = email
+		@passphrase = passphrase
+		return @key
 
 	# Rules for 'OK' passwords:
 	#    - Within the first 8 characters:

@@ -10,7 +10,7 @@ callOnActivePage = (callback) ->
 	return
 
 init = ->
-	$('#savekey').on 'click', save_key
+	$('#saveemail').on 'click', save_email
 	$('#site').on 'input', gen_passwd
 	$('#dbg').on 'change', toggle_debug
 	ui_init()

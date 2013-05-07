@@ -1,4 +1,4 @@
-passwdgen = null
+passwdgen = new PasswdGenerator
 
 chromeext = null
 
@@ -26,62 +26,46 @@ toggle_debug = ->
 gather_input = ->
 	# TODO collect password configuration from the page
 	{
+		email: $('#email').val()
+		passphrase: $('#passphrase').val()
+		itercnt: 1<<10
 		site: $('#site').val()
 		generation: 0
 		num_symbols: 3
 		length: 12
 	}
 
-# TODO always use 1024 pass?
-itercnt = ->
-	1<<10
 
-save_data = (email, derived_key) ->
+save_data = () ->
 	if is_chromeext()
-		localStorage.email = email
-		localStorage.derived_key = derived_key
+		localStorage.email = $('#email').val()
 
-clear_data = ->
-	localStorage.email = null
-	localStorage.derived_key = null
-
-hide_emailpp = ->
-	$('#email').val ''
-	$('#pp').val ''
-	$('#savekey').html 'Clear Derived Key'
-	$('#emailpp').hide(200)
+hide_email = ->
+	$('#saveemail').html 'Change Email'
+	$('#email').hide(200)
 	return
 
-show_emailpp = ->
-	$('#emailpp').show(200)
-	$('#savekey').html 'Save Derived Key'
+show_email = ->
+	$('#email').show(200)
+	$('#saveemail').html 'Save Email'
 	return
 
-save_key = ->
-	unless $('#emailpp').is ':visible'
-		show_emailpp()
-		clear_data()
-		return
-	email = $('#email').val()
-	pp = $('#pp').val()
-	if email == '' or pp == ''
-		notify 'Both email and passphrase required.'
-		return
-	passwdgen = new window.PasswdGenerator(email, pp, itercnt(), null)
-	save_data email, passwdgen.derived_key
-	hide_emailpp()
-	gen_passwd() # update generated password upon derived key change
-
-	debug('derived key: ' + passwdgen.derived_key)
-
+save_email = ->
+	if $('#email').is ':visible'
+		# allow user to clear stored email
+		save_data()
+		email = $('#email').val()
+		if email == ''
+			notify 'email cleared'
+		else
+			hide_email()
+	else
+		show_email()
 	return
 
 gen_passwd = ->
 	if $('#site').val() == ''
 		$('#passwd').val ''
-		return
-	if passwdgen == null
-		notify 'key not derived'
 		return
 	p = passwdgen.generate gather_input()
 	$('#passwd').val p
@@ -134,14 +118,13 @@ parse_site = (url) ->
 	host2domain host
 
 ui_init = ->
-	if is_chromeext() && localStorage.derived_key?
-		passwdgen = new window.PasswdGenerator(
-			localStorage.email, null, null, localStorage.derived_key)
-		hide_emailpp()
+	if is_chromeext() && localStorage.email? && localStorage.email != ''
+		$('#email').val localStorage.email
+		hide_email()
 
 # export functions
 window.toggle_debug = toggle_debug
-window.save_key = save_key
+window.save_email = save_email
 window.gen_passwd = gen_passwd
 window.parse_site = parse_site
 window.ui_init = ui_init
