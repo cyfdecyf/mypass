@@ -30,8 +30,8 @@ gather_input = ->
 		passphrase: $('#passphrase').val()
 		itercnt: 1<<8
 		site: $('#site').val()
-		generation: 0
-		num_symbols: 3
+		generation: 1
+		num_symbols: 0
 		length: 12
 	}
 
@@ -91,8 +91,7 @@ parse_site = (url) ->
 		return ''
 	if url.substr(0, 7) == 'file://'
 		return ''
-	host = parse_hostname url
-	host2domain host
+	host2domain(parse_hostname url)
 
 ui_init = ->
 	if is_chromeext() && localStorage.email? && localStorage.email != ''

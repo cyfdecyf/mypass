@@ -9,16 +9,25 @@ callOnActivePage = (callback) ->
 	)
 	return
 
+set_tabindex = ->
+	index = 1
+	if $('#email').val() == ''
+		$('#email').prop('tabindex', index.toString())
+		index++
+	$('#passphrase').prop('tabindex', index.toString())
+	index++
+	$('#passwd').prop('tabindex', index.toString())
+
 init = ->
+	ui_init()
+	set_tabindex()
 	# focusout event may not occur, so use input event
 	$('#email').on 'input', email_update
 	$('#site').on 'input', gen_passwd
 	$('#dbg').on 'change', toggle_debug
-	ui_init()
 	# $("#info").val(window.location.search.substring(1))
 	callOnActivePage((tab) ->
 		$('#site').val(parse_site tab.url)
-		gen_passwd()
 		return
 	)
 	return
