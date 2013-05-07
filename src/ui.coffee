@@ -32,7 +32,7 @@ gather_input = ->
 	{
 		email: $('#email').val()
 		passphrase: $('#passphrase').val()
-		itercnt: 1<<8
+		itercnt: 1 << 8
 		site: $('#site').val()
 		generation: 1
 		num_symbols: 0

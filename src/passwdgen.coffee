@@ -3,6 +3,7 @@ C = if CryptoJS? then CryptoJS else null
 config =
 	pw: { min_size: 8, max_size: 16 }
 
+# many code copied from derive.iced in 1SP
 class PasswdGenerator
 	# input should contain following property
 	#     site, generation, num_symbols, length, email, passphrase, itercnt
@@ -12,28 +13,27 @@ class PasswdGenerator
 		dk = @derive_key(input.email, input.passphrase, input.itercnt, input.compute_hook)
 		i = 0
 		ret = null
-		tmpl = [ "OneShallPass v2.0", input.email, input.site, input.generation ].join ""
+
 		until ret
-			# TODO 1SP uses purepack to concatenate strings, make it compatible with 1SP
-			a = tmpl.concat i.toString()
-			hash = C.HmacSHA512 a, dk
+			a = [ "OneShallPass v2.0", input.email, input.site, input.generation, i ]
+			wa = pack_to_word_array a
+			hash = C.HmacSHA512 wa, dk
 			b64 = hash.toString C.enc.Base64
 			ret = b64 if @is_ok_pw b64
 			i++
+
 		x = @add_syms ret, input.num_symbols
 		x[0...input.length]
 
 	derive_key: (email, passphrase, itercnt, compute_hook) ->
 		# TODO check if the derived key is the same as 1SP
-		# what should be used as the key to HmacSHA512?
-
 		# cache derived key for last email and passphrase pair
-		if @email == email && @passphrase == passphrase
+		if @email == email && @passphrase == passphrase && @itercnt == itercnt
 			return @key
 
 		# The initial setup as per PBKDF2, with email as the salt
 		hmac = C.algo.HMAC.create C.algo.SHA512, passphrase
-		block_index = C.lib.WordArray.create [ 1 ] # WEB_PW keymode in 1SP
+		block_index = C.lib.WordArray.create [ 0x1 ] # WEB_PW keymode in 1SP
 		block = hmac.update(email).finalize block_index
 		hmac.reset()
 
@@ -52,6 +52,7 @@ class PasswdGenerator
 		@key = block
 		@email = email
 		@passphrase = passphrase
+		@itercnt = itercnt
 		return @key
 
 	# Rules for 'OK' passwords:
@@ -135,5 +136,29 @@ class PasswdGenerator
 	is_lower: (c) -> "a".charCodeAt(0) <= c and c <= "z".charCodeAt(0)
 	is_digit: (c) -> "0".charCodeAt(0) <= c and c <= "9".charCodeAt(0)
 	is_valid: (c) -> @is_upper(c) or @is_lower(c) or @is_digit (c)
+
+# copied from packed.iced in 1SP
+# replace purepack with msgpack
+pack_to_word_array = (obj) ->
+	ui8a = msgpack.pack(obj, 'ui8a')
+	i32a = Ui8a.to_i32a ui8a
+	v = (w for w in i32a)
+	C.lib.WordArray.create v, ui8a.length
+
+Ui8a =
+	stringify : (wa) ->
+		[v,n] = [wa.words, wa.sigBytes]
+		out = new Uint8Array n
+		(out[i] = ((v[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff) for i in [0...n])
+		return out
+
+	to_i32a : (uia) ->
+		n = uia.length
+		nw = (n >>> 2) + (if (n & 0x3) then 1 else 0)
+		out = new Int32Array nw
+		out[i] = 0 for i in [0...nw]
+		for b, i in uia
+			out[i >>> 2] |= (b << ((3 - (i & 0x3)) << 3))
+		out
 
 window.PasswdGenerator = PasswdGenerator
