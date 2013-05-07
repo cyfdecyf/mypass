@@ -5,8 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- css -->
 	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-	<!-- <link href="Chrome/bootstrap-responsive.min.css" rel="stylesheet" media="screen"> -->
-	<link href="css/mypass.css" rel="stylesheet">
+	<link href="css/popup.css" rel="stylesheet">
 	<!-- javascript -->
 	<script src="js/jquery.js"></script>
 	<script src="js/cryptojs/components/core-min.js"></script>
@@ -24,15 +23,16 @@
 			<input type="text" class="input-large" id="email" placeholder="Email">
 			<input type="password" class="input-large" id="pp" placeholder="Passphrase">
 		</div>
-		<p>
-			<button class="btn" id="savekey" type="button">Save Derived Key</button>
-		</p>
 
 		<label for="site">Site</label>
 		<input type="text" class="input-large" id="site" placeholder="Site" tabindex="2">
 		<label for="passwd">Generated Password</label>
 		<input type="text" class="input-large" id="passwd" placeholder="Generated Password"
 			readonly tabindex="1">
+
+		<p>
+			<button class="btn" id="savekey" type="button">Save Derived Key</button>
+		</p>
 
 		<label class="checkbox"> <input type="checkbox" id="dbg"> Show debug message </label>
 

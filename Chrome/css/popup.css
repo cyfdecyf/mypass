@@ -1,6 +1,6 @@
 .container {
-	width: auto;
-	max-width: 680px;
+	width: 225px;
+	margin: 10px;
 }
 .page-header {
 	text-align: center;
