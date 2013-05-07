@@ -28,15 +28,14 @@ derive_key_compute_hook = (i) ->
 		notify 'Key derived'
 
 gather_input = ->
-	# TODO collect password configuration from the page
 	{
 		email: $('#email').val()
 		passphrase: $('#passphrase').val()
-		itercnt: 1 << 8
+		itercnt: 1 << Number($('#hashes').val())
 		site: $('#site').val()
-		generation: 1
-		num_symbols: 0
-		length: 12
+		generation: Number($('#generation').val())
+		num_symbol: Number($('#num_symbol').val())
+		length: Number($('#length').val())
 		compute_hook: derive_key_compute_hook
 	}
 

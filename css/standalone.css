@@ -1,5 +1,7 @@
 .container {
-	width: 225px;
+	width: auto;
+	max-width: 640px;
+	margin-top: 15px;
 }
 .page-header {
 	text-align: center;

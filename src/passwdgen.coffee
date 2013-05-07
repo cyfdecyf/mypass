@@ -6,7 +6,7 @@ config =
 # many code copied from derive.iced in 1SP
 class PasswdGenerator
 	# input should contain following property
-	#     site, generation, num_symbols, length, email, passphrase, itercnt
+	#     site, generation, num_symbol, length, email, passphrase, itercnt
 	# optional:
 	# 	  compute_hook
 	generate: (input) ->
@@ -22,7 +22,7 @@ class PasswdGenerator
 			ret = b64 if @is_ok_pw b64
 			i++
 
-		x = @add_syms ret, input.num_symbols
+		x = @add_syms ret, input.num_symbol
 		x[0...input.length]
 
 	derive_key: (email, passphrase, itercnt, compute_hook) ->

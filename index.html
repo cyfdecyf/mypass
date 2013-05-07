@@ -2,12 +2,12 @@
 <html>
 <head>
 	<title>MyPass</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- css -->
-    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <!-- <link href="Chrome/bootstrap-responsive.min.css" rel="stylesheet" media="screen"> -->
-    <link href="css/standalone.css" rel="stylesheet">
-    <!-- javascript -->
+	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<!-- <link href="Chrome/bootstrap-responsive.min.css" rel="stylesheet" media="screen"> -->
+	<link href="css/standalone.css" rel="stylesheet">
+	<!-- javascript -->
 	<script src="js/jquery.js"></script>
 	<script src="js/msgpack.js"></script>
 	<script src="js/cryptojs/components/core-min.js"></script>
@@ -21,19 +21,123 @@
 </head>
 <body>
 	<div id="content" class="container">
-		<div class="page-header">
-			<h1>Own Your Password</h1>
-		</div>
+		<form class="form-horizontal">
+			<div class="control-group">
+				<label class="control-label" for="email">Email</label>
+				<!-- tabindex does not auto focus in Chrome when open as a web page -->
+				<div class="controls">
+					<input type="text" class="input-large" id="email" placeholder="hello@world.com" autofocus>
+				</div>
+			</div>
 
-		<!-- tabindex does not auto focus in Chrome when open as a web page -->
-		<input type="text" class="input-large" id="email" placeholder="Email" autofocus>
-		<input type="password" class="input-large" id="passphrase" placeholder="Passphrase">
-		<label for="site">Site</label>
-		<input type="text" class="input-large" id="site" placeholder="Site">
-		<label for="passwd">Generated Password</label>
-		<input type="text" class="input-large" id="passwd" placeholder="Generated Password" readonly>
+			<div class="control-group">
+				<label class="control-label" for="passphrase">Passphrase</label>
+				<div class="controls">
+					<input type="password" class="input-large" id="passphrase" placeholder="Your Secret">
+				</div>
+			</div>
 
-		<label class="checkbox"> <input type="checkbox" id="dbg"> Show debug message </label>
+			<div class="control-group">
+				<label class="control-label" for="site">Site</label>
+				<div class="controls">
+					<input type="text" class="input-large" id="site" placeholder="google.com">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="passwd">Password</label>
+				<div class="controls">
+					<input type="text" class="input-large" id="passwd" placeholder="Generated Password" readonly>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="num_symbol">Symbols</label>
+				<div class="controls">
+					<select id="num_symbol">
+						<option>0</option>
+						<option>1</option>
+						<option>2</option>
+						<option>3</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="length">Length</label>
+				<div class="controls">
+					<select id="length">
+						<option>8</option>
+						<option>9</option>
+						<option>10</option>
+						<option>11</option>
+						<option selected="selected">12</option>
+						<option>13</option>
+						<option>14</option>
+						<option>15</option>
+						<option>16</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="generation">Generation</label>
+				<div class="controls">
+					<select id="generation">
+						<option>1</option>
+						<option>2</option>
+						<option>3</option>
+						<option>4</option>
+						<option>5</option>
+						<option>6</option>
+						<option>7</option>
+						<option>8</option>
+						<option>9</option>
+						<option>10</option>
+						<option>11</option>
+						<option>12</option>
+						<option>13</option>
+						<option>14</option>
+						<option>15</option>
+						<option>16</option>
+						<option>17</option>
+						<option>18</option>
+						<option>19</option>
+						<option>20</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="hashes">Hashes</label>
+				<div class="controls">
+					<select id="hashes">
+						<option value="1">2^1</option>
+						<option value="2">2^2</option>
+						<option value="3">2^3</option>
+						<option value="4">2^4</option>
+						<option value="5">2^5</option>
+						<option value="6">2^6</option>
+						<option value="7">2^7</option>
+						<option value="8" selected="selected">2^8</option>
+						<option value="9">2^9</option>
+						<option value="10">2^10</option>
+						<option value="11">2^11</option>
+						<option value="12">2^12</option>
+						<option value="13">2^13</option>
+						<option value="14">2^14</option>
+						<option value="15">2^15</option>
+						<option value="16">2^16</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<div class="controls">
+					<label class="checkbox"> <input type="checkbox" id="dbg"> Show debug message </label>
+				</div>
+			</div>
+		</form>
 
 		<div id="info"></div>
 		<div id="dbginfo"></div>
