@@ -6,8 +6,10 @@ config =
 class PasswdGenerator
 	# input should contain following property
 	#     site, generation, num_symbols, length, email, passphrase, itercnt
+	# optional:
+	# 	  compute_hook
 	generate: (input) ->
-		dk = @derive_key(input.email, input.passphrase, input.itercnt)
+		dk = @derive_key(input.email, input.passphrase, input.itercnt, input.compute_hook)
 		i = 0
 		ret = null
 		tmpl = [ "OneShallPass v2.0", input.email, input.site, input.generation ].join ""
@@ -21,15 +23,33 @@ class PasswdGenerator
 		x = @add_syms ret, input.num_symbols
 		x[0...input.length]
 
-	derive_key: (email, passphrase, itercnt) ->
+	derive_key: (email, passphrase, itercnt, compute_hook) ->
 		# TODO check if the derived key is the same as 1SP
 		# what should be used as the key to HmacSHA512?
 
 		# cache derived key for last email and passphrase pair
 		if @email == email && @passphrase == passphrase
 			return @key
-		@key = C.PBKDF2 passphrase, email,
-			{ keySize: 512/32, iterations: itercnt, hasher: C.algo.SHA512 }
+
+		# The initial setup as per PBKDF2, with email as the salt
+		hmac = C.algo.HMAC.create C.algo.SHA512, passphrase
+		block_index = C.lib.WordArray.create [ 1 ] # WEB_PW keymode in 1SP
+		block = hmac.update(email).finalize block_index
+		hmac.reset()
+
+		# Make a copy of the original block....
+		intermediate = block.clone()
+
+		i = 1
+		while i < itercnt
+			if compute_hook?
+				compute_hook i
+			intermediate = hmac.finalize intermediate
+			hmac.reset()
+			block.words[j] ^= w for w,j in intermediate.words
+			i++
+
+		@key = block
 		@email = email
 		@passphrase = passphrase
 		return @key

@@ -8,7 +8,7 @@ is_chromeext = ->
 	chromeext
 
 notify = (msg) ->
-	$('#info').html(msg).show().hide(3000)
+	$('#info').html(msg).show().hide(1500)
 
 debug_on = ->
 	$('#dbg').is ':checked'
@@ -23,6 +23,10 @@ verbose = (msg) ->
 toggle_debug = ->
 	$('#dbginfo').html ''
 
+derive_key_compute_hook = (i) ->
+	if i == (1<<8) - 1
+		notify 'Key derived'
+
 gather_input = ->
 	# TODO collect password configuration from the page
 	{
@@ -33,6 +37,7 @@ gather_input = ->
 		generation: 1
 		num_symbols: 0
 		length: 12
+		compute_hook: derive_key_compute_hook
 	}
 
 email_update = ->
