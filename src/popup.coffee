@@ -10,7 +10,8 @@ callOnActivePage = (callback) ->
 	return
 
 init = ->
-	$('#saveemail').on 'click', save_email
+	# focusout event may not occur, so use input event
+	$('#email').on 'input', email_update
 	$('#site').on 'input', gen_passwd
 	$('#dbg').on 'change', toggle_debug
 	ui_init()

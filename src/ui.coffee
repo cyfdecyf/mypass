@@ -28,39 +28,16 @@ gather_input = ->
 	{
 		email: $('#email').val()
 		passphrase: $('#passphrase').val()
-		itercnt: 1<<10
+		itercnt: 1<<8
 		site: $('#site').val()
 		generation: 0
 		num_symbols: 3
 		length: 12
 	}
 
-
-save_data = () ->
+email_update = ->
 	if is_chromeext()
 		localStorage.email = $('#email').val()
-
-hide_email = ->
-	$('#saveemail').html 'Change Email'
-	$('#email').hide(200)
-	return
-
-show_email = ->
-	$('#email').show(200)
-	$('#saveemail').html 'Save Email'
-	return
-
-save_email = ->
-	if $('#email').is ':visible'
-		# allow user to clear stored email
-		save_data()
-		email = $('#email').val()
-		if email == ''
-			notify 'email cleared'
-		else
-			hide_email()
-	else
-		show_email()
 	return
 
 gen_passwd = ->
@@ -120,11 +97,10 @@ parse_site = (url) ->
 ui_init = ->
 	if is_chromeext() && localStorage.email? && localStorage.email != ''
 		$('#email').val localStorage.email
-		hide_email()
 
 # export functions
 window.toggle_debug = toggle_debug
-window.save_email = save_email
+window.email_update = email_update
 window.gen_passwd = gen_passwd
 window.parse_site = parse_site
 window.ui_init = ui_init
