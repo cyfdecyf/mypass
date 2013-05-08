@@ -42,15 +42,29 @@ gather_input = ->
 username_update = ->
 	if is_chromeext()
 		localStorage.username = $('#username').val()
+	delay_gen_passwd()
 	return
 
 gen_passwd = ->
-	if $('#site').val() == ''
+	if $('#site').val() == '' || $('#username').val() == '' || $('#passphrase').val() == ''
 		$('#passwd').val ''
 		return
 	p = passwdgen.generate gather_input()
 	$('#passwd').val p
 	debug('derived key: ' + passwdgen.key)
+	return
+
+lastInputTime = new Date(1970, 1, 1)
+delayTime = 300
+
+delay_gen_passwd = ->
+	triggerTime = lastInputTime = new Date().getTime()
+	setTimeout(
+		->
+			if triggerTime == lastInputTime
+				gen_passwd()
+				return
+		, delayTime)
 	return
 
 host_is_ip = (host) ->
@@ -106,5 +120,6 @@ ui_init = ->
 window.toggle_debug = toggle_debug
 window.username_update = username_update
 window.gen_passwd = gen_passwd
+window.delay_gen_passwd = delay_gen_passwd
 window.parse_site = parse_site
 window.ui_init = ui_init
