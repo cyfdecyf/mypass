@@ -63,6 +63,9 @@ delay_gen_passwd = ->
 		, delayTime)
 	return
 
+passwd_onclick = ->
+	$(this).select()
+
 host_is_ip = (host) ->
 	parts = host.split '.'
 	if parts.length != 4
@@ -115,6 +118,7 @@ ui_init = ->
 # export functions
 window.toggle_debug = toggle_debug
 window.username_update = username_update
+window.passwd_onclick = passwd_onclick
 window.gen_passwd = gen_passwd
 window.delay_gen_passwd = delay_gen_passwd
 window.parse_site = parse_site

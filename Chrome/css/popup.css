@@ -22,3 +22,7 @@
 .container .credit {
 	margin: 20px 0;
 }
+input[readonly] {
+	cursor: default;
+	background-color: #eeeeee;
+}
