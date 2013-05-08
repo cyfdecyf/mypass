@@ -8,7 +8,7 @@ is_chromeext = ->
 	chromeext
 
 notify = (msg) ->
-	$('#info').html(msg).show().hide(1500)
+	$('#info').html(msg).show().delay(1000).hide(300)
 
 debug_on = ->
 	$('#dbg').is ':checked'
@@ -23,10 +23,6 @@ verbose = (msg) ->
 toggle_debug = ->
 	$('#dbginfo').html ''
 
-derive_key_compute_hook = (i) ->
-	if i == (1<<8) - 1
-		notify 'Key derived'
-
 gather_input = ->
 	{
 		username: $('#username').val()
@@ -36,7 +32,6 @@ gather_input = ->
 		generation: $('#generation').val()
 		num_symbol: Number($('#num_symbol').val())
 		length: Number($('#length').val())
-		compute_hook: derive_key_compute_hook
 	}
 
 username_update = ->
@@ -51,6 +46,7 @@ gen_passwd = ->
 		return
 	p = passwdgen.generate gather_input()
 	$('#passwd').val p
+	notify 'Password for <b>' + $('#site').val() + '</b> generated'
 	debug('derived key: ' + passwdgen.key)
 	return
 

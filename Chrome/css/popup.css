@@ -1,6 +1,7 @@
 .container {
 	width: 330px;
 	margin-top: 15px;
+	margin-bottom: 5px;
 }
 /* customize bootstrap css */
 .form-horizontal .control-label {

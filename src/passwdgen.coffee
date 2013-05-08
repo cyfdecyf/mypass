@@ -7,10 +7,8 @@ config =
 class PasswdGenerator
 	# input should contain following property
 	#     site, generation, num_symbol, length, username, passphrase, itercnt
-	# optional:
-	# 	  compute_hook
 	generate: (input) ->
-		dk = @derive_key(input.username, input.passphrase, input.itercnt, input.compute_hook)
+		dk = @derive_key(input.username, input.passphrase, input.itercnt)
 		i = 0
 		ret = null
 
@@ -25,7 +23,7 @@ class PasswdGenerator
 		x = @add_syms ret, input.num_symbol
 		x[0...input.length]
 
-	derive_key: (username, passphrase, itercnt, compute_hook) ->
+	derive_key: (username, passphrase, itercnt) ->
 		# cache derived key for last username and passphrase pair
 		if @username == username && @passphrase == passphrase && @itercnt == itercnt
 			return @key
@@ -41,8 +39,6 @@ class PasswdGenerator
 
 		i = 1
 		while i < itercnt
-			if compute_hook?
-				compute_hook i
 			intermediate = hmac.finalize intermediate
 			hmac.reset()
 			block.words[j] ^= w for w,j in intermediate.words

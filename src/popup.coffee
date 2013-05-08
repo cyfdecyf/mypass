@@ -21,15 +21,13 @@ set_tabindex = ->
 init = ->
 	ui_init()
 	set_tabindex()
-	# focusout event may not occur, so use input event
-	$('#site').on 'input', gen_passwd
+	$('#site').on 'input', delay_gen_passwd
 	$('#username').on 'input', username_update
 	$('#passphrase').on 'input', delay_gen_passwd
 	$('#num_symbol').on 'change', gen_passwd
 	$('#length').on 'change', gen_passwd
-	$('#generation').on 'change', delay_gen_passwd
-	$('#hashes').on 'change', gen_passwd
-
+	$('#generation').on 'change', gen_passwd
+	$('#hashes').on 'change', delay_gen_passwd
 	$('#dbg').on 'change', toggle_debug
 	# $("#info").val(window.location.search.substring(1))
 	callOnActivePage((tab) ->
