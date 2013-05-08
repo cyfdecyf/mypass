@@ -9,17 +9,7 @@ callOnActivePage = (callback) ->
 	)
 	return
 
-set_tabindex = ->
-	index = 1
-	if $('#username').val() == ''
-		$('#username').prop('tabindex', index.toString())
-		index++
-	$('#passphrase').prop('tabindex', index.toString())
-	index++
-	$('#passwd').prop('tabindex', index.toString())
-
 init = ->
-	set_tabindex()
 	$('#site').on 'input', delay_gen_passwd
 	$('#username').on 'input', username_update
 	$('#passphrase').on 'input', delay_gen_passwd

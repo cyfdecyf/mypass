@@ -8,4 +8,5 @@ $ ->
 	$('#generation').on 'change', gen_passwd
 	$('#hashes').on 'change', delay_gen_passwd
 	$('#dbg').on 'change', toggle_debug
+	ui_init()
 	return

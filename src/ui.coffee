@@ -162,15 +162,32 @@ parse_site = (url) ->
 		return ''
 	host2domain(parse_hostname url)
 
+set_tabindex = ->
+	index = 1
+	set_one_tabindex = (id) ->
+		e = $('#'+id)
+		if e.val() == ''
+			console.log "#{id} tabindex #{index} #{e.val()}"
+			e.prop 'tabindex', index.toString()
+			e.focus() if index == 1
+			index++
+			return
+	set_one_tabindex id for id in [ 'site', 'username', 'passphrase', 'passwd' ]
+	return
+
 ui_init = ->
+	console.log 'ui_init'
 	if is_chromeext() && localStorage.username? && localStorage.username != ''
 		$('#username').val localStorage.username
 	site = $('#site').val()
 	if site != ''
 		get_passwd_option site, (opt) ->
-			return unless opt?
-			update_passwd_option opt
-			notify "Password option for <b>#{site}</b> loaded.", NOTIFY_NO_HIDE
+			if opt?
+				update_passwd_option opt
+				notify "Password option for <b>#{site}</b> loaded.", NOTIFY_NO_HIDE
+			set_tabindex()
+	else
+		set_tabindex()
 	return
 
 # export functions
