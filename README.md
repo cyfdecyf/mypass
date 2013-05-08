@@ -1,4 +1,4 @@
-This is a Chrome extension for [One Shall Pass](https://oneshallpass.com/) (1SP).
+**MyPass** is a Chrome extension for [One Shall Pass](https://oneshallpass.com/) (1SP).
 
 It's currently under development.
 
