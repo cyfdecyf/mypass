@@ -7,8 +7,13 @@ is_chromeext = ->
 		chromeext = $('#chromeext').length != 0
 	chromeext
 
-notify = (msg) ->
-	$('#info').html(msg).show().delay(1000).hide(300)
+NOTIFY_HIDE = true
+NOTIFY_NO_HIDE = false
+
+notify = (msg, hide = NOTIFY_HIDE) ->
+	info = $('#info').html(msg).show()
+	if hide
+		info.delay(1000).hide(300)
 
 debug_on = ->
 	$('#dbg').is ':checked'
@@ -34,6 +39,26 @@ gather_input = ->
 		length: Number($('#length').val())
 	}
 
+update_passwd_option = (opt) ->
+	# Note saved opt key name and page element id mapping
+	$('#username').val opt.uname
+	$('#num_symbol').val opt.nsym
+	$('#length').val opt.len
+	$('#generation').val opt.gen
+	return
+
+get_passwd_option = (site, cb) ->
+	chrome.storage.sync.get(
+		site,
+		(items) ->
+			unless items?
+				cb null
+				return
+			cb JSON.parse(items[site])
+			return
+	)
+	return
+
 save_passwd_option = (input) ->
 	optjson = JSON.stringify {
 		uname: input.username
@@ -47,12 +72,13 @@ save_passwd_option = (input) ->
 		obj,
 		->
 			if chrome.runtime.lastError?
-				notify 'Password for <b>' + input.site + '</b> generated. <br />' +
-					'Options save error: ' + chrome.runtime.lastError
+				notify "Password for <b>#{input.site}</b> generated. <br />" +
+					"Options save error: #{chrome.runtime.lastError}"
 			else
-				notify 'Password for <b>' + input.site + '</b> generated. <br />' +
-					'Options saved.'
+				notify "Password for <b>#{input.site}</b> generated. <br />" +
+					"Options saved."
 	)
+	return
 
 gen_passwd = ->
 	if $('#site').val() == '' || $('#username').val() == '' || $('#passphrase').val() == ''
@@ -89,6 +115,7 @@ username_update = ->
 
 passwd_onclick = ->
 	$(this).select()
+	return
 
 host_is_ip = (host) ->
 	parts = host.split '.'
@@ -138,6 +165,13 @@ parse_site = (url) ->
 ui_init = ->
 	if is_chromeext() && localStorage.username? && localStorage.username != ''
 		$('#username').val localStorage.username
+	site = $('#site').val()
+	if site != ''
+		get_passwd_option site, (opt) ->
+			return unless opt?
+			update_passwd_option opt
+			notify "Password option for <b>#{site}</b> loaded.", NOTIFY_NO_HIDE
+	return
 
 # export functions
 window.toggle_debug = toggle_debug

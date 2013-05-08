@@ -19,7 +19,6 @@ set_tabindex = ->
 	$('#passwd').prop('tabindex', index.toString())
 
 init = ->
-	ui_init()
 	set_tabindex()
 	$('#site').on 'input', delay_gen_passwd
 	$('#username').on 'input', username_update
@@ -32,7 +31,10 @@ init = ->
 	$('#dbg').on 'change', toggle_debug
 	# $("#info").val(window.location.search.substring(1))
 	callOnActivePage((tab) ->
-		$('#site').val(parse_site tab.url)
+		# make sure when ui_init is called, site is already filled
+		site = parse_site tab.url
+		$('#site').val site
+		ui_init()
 		return
 	)
 	return
