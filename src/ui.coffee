@@ -29,25 +29,43 @@ gather_input = ->
 		passphrase: $('#passphrase').val()
 		itercnt: 1 << Number($('#hashes').val())
 		site: $('#site').val()
-		generation: $('#generation').val()
+		generation: Number($('#generation').val())
 		num_symbol: Number($('#num_symbol').val())
 		length: Number($('#length').val())
 	}
 
-username_update = ->
-	if is_chromeext()
-		localStorage.username = $('#username').val()
-	delay_gen_passwd()
-	return
+save_passwd_option = (input) ->
+	optjson = JSON.stringify {
+		uname: input.username
+		nsym: input.num_symbol
+		len: input.length
+		gen: input.generation
+	}
+	obj = {}
+	obj[input.site] = optjson
+	chrome.storage.sync.set(
+		obj,
+		->
+			if chrome.runtime.lastError?
+				notify 'Password for <b>' + input.site + '</b> generated. <br />' +
+					'Options save error: ' + chrome.runtime.lastError
+			else
+				notify 'Password for <b>' + input.site + '</b> generated. <br />' +
+					'Options saved.'
+	)
 
 gen_passwd = ->
 	if $('#site').val() == '' || $('#username').val() == '' || $('#passphrase').val() == ''
 		$('#passwd').val ''
 		return
-	p = passwdgen.generate gather_input()
+	input = gather_input()
+	p = passwdgen.generate input
 	$('#passwd').val p
-	notify 'Password for <b>' + $('#site').val() + '</b> generated'
 	debug('derived key: ' + passwdgen.key)
+	if is_chromeext()
+		save_passwd_option input
+	else
+		notify 'Password for <b>' + $('#site').val() + '</b> generated'
 	return
 
 lastInputTime = new Date(1970, 1, 1)
@@ -61,6 +79,12 @@ delay_gen_passwd = ->
 				gen_passwd()
 				return
 		, delayTime)
+	return
+
+username_update = ->
+	if is_chromeext()
+		localStorage.username = $('#username').val()
+	delay_gen_passwd()
 	return
 
 passwd_onclick = ->

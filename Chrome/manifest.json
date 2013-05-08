@@ -13,5 +13,5 @@
     },
     "default_popup": "popup.html?init=1"
   },
-  "permissions": [ "tabs" ]
+  "permissions": [ "tabs", "storage" ]
 }
