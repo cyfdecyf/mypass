@@ -11,8 +11,8 @@ callOnActivePage = (callback) ->
 
 set_tabindex = ->
 	index = 1
-	if $('#email').val() == ''
-		$('#email').prop('tabindex', index.toString())
+	if $('#username').val() == ''
+		$('#username').prop('tabindex', index.toString())
 		index++
 	$('#passphrase').prop('tabindex', index.toString())
 	index++
@@ -22,7 +22,7 @@ init = ->
 	ui_init()
 	set_tabindex()
 	# focusout event may not occur, so use input event
-	$('#email').on 'input', email_update
+	$('#username').on 'input', username_update
 	$('#site').on 'input', gen_passwd
 	$('#num_symbol').on 'change', gen_passwd
 	$('#length').on 'change', gen_passwd

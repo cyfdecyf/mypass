@@ -23,10 +23,17 @@
 	<div id="content" class="container">
 		<form class="form-horizontal">
 			<div class="control-group">
-				<label class="control-label" for="email">Email</label>
+				<label class="control-label" for="site">Site</label>
+				<div class="controls">
+					<input type="text" class="input-large" id="site" placeholder="google.com" autofocus>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="username">User name</label>
 				<!-- tabindex does not auto focus in Chrome when open as a web page -->
 				<div class="controls">
-					<input type="text" class="input-large" id="email" placeholder="hello@world.com" autofocus>
+					<input type="text" class="input-large" id="username" placeholder="hello@world.com">
 				</div>
 			</div>
 
@@ -34,13 +41,6 @@
 				<label class="control-label" for="passphrase">Passphrase</label>
 				<div class="controls">
 					<input type="password" class="input-large" id="passphrase" placeholder="Your Secret">
-				</div>
-			</div>
-
-			<div class="control-group">
-				<label class="control-label" for="site">Site</label>
-				<div class="controls">
-					<input type="text" class="input-large" id="site" placeholder="google.com">
 				</div>
 			</div>
 

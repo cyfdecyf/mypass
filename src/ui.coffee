@@ -29,7 +29,7 @@ derive_key_compute_hook = (i) ->
 
 gather_input = ->
 	{
-		email: $('#email').val()
+		username: $('#username').val()
 		passphrase: $('#passphrase').val()
 		itercnt: 1 << Number($('#hashes').val())
 		site: $('#site').val()
@@ -39,9 +39,9 @@ gather_input = ->
 		compute_hook: derive_key_compute_hook
 	}
 
-email_update = ->
+username_update = ->
 	if is_chromeext()
-		localStorage.email = $('#email').val()
+		localStorage.username = $('#username').val()
 	return
 
 gen_passwd = ->
@@ -50,6 +50,7 @@ gen_passwd = ->
 		return
 	p = passwdgen.generate gather_input()
 	$('#passwd').val p
+	debug('derived key: ' + passwdgen.key)
 	return
 
 host_is_ip = (host) ->
@@ -98,12 +99,12 @@ parse_site = (url) ->
 	host2domain(parse_hostname url)
 
 ui_init = ->
-	if is_chromeext() && localStorage.email? && localStorage.email != ''
-		$('#email').val localStorage.email
+	if is_chromeext() && localStorage.username? && localStorage.username != ''
+		$('#username').val localStorage.username
 
 # export functions
 window.toggle_debug = toggle_debug
-window.email_update = email_update
+window.username_update = username_update
 window.gen_passwd = gen_passwd
 window.parse_site = parse_site
 window.ui_init = ui_init
