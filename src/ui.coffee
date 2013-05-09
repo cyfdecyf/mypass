@@ -146,7 +146,7 @@ set_tabindex = ->
 			e.focus() if index == 1
 			index++
 			return
-	set_one_tabindex id for id in [ 'site', 'salt', 'passphrase', 'passwd', 'username' ]
+	set_one_tabindex id for id in [ 'salt', 'passphrase', 'site', 'passwd', 'username' ]
 	return
 
 exports.init = init = ->
