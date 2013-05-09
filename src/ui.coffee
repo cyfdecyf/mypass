@@ -16,18 +16,16 @@ NO_NOTE = false
 
 notify = (msg, hide = NOTIFY_HIDE) ->
 	info = $('#info').html(msg).show()
-	if hide
-		info.delay(1000).hide(300)
+	info.delay(1000).hide(300) if hide
 
 debug_on = ->
 	$('#dbg').is ':checked'
 
 debug = (msg) ->
-	if debug_on()
-		$('#dbginfo').append('<p>' + msg + '</p>')
+	$('#dbginfo').append("<p>#{msg}</p>") if debug_on()
 
 verbose = (msg) ->
-	$('#dbginfo').append('<p>' + msg + '</p>')
+	$('#dbginfo').append("<p>#{msg}</p>")
 
 exports.toggle_debug = toggle_debug = ->
 	$('#dbginfo').html ''
