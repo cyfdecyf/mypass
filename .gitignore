@@ -1,2 +1,3 @@
-Chrome/js/*.js
+js
 node_modules
+Chrome/js/*.js
