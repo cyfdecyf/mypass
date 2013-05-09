@@ -1,10 +1,11 @@
+purepack = require 'purepack'
 C = if CryptoJS? then CryptoJS else null
 
 config =
 	pw: { min_size: 8, max_size: 16 }
 
 # many code copied from derive.iced in 1SP
-class PasswdGenerator
+exports.PasswdGenerator = class PasswdGenerator
 	# input should contain following property
 	#     site, generation, num_symbol, length, salt, passphrase, itercnt
 	generate: (input) ->
@@ -135,7 +136,7 @@ class PasswdGenerator
 # copied from packed.iced in 1SP
 # replace purepack with msgpack
 pack_to_word_array = (obj) ->
-	ui8a = msgpack.pack(obj, 'ui8a')
+	ui8a = purepack.pack(obj, 'ui8a')
 	i32a = Ui8a.to_i32a ui8a
 	v = (w for w in i32a)
 	C.lib.WordArray.create v, ui8a.length
@@ -155,5 +156,3 @@ Ui8a =
 		for b, i in uia
 			out[i >>> 2] |= (b << ((3 - (i & 0x3)) << 3))
 		out
-
-window.PasswdGenerator = PasswdGenerator

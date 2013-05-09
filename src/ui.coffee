@@ -1,3 +1,4 @@
+PasswdGenerator = require('./passwdgen').PasswdGenerator
 passwdgen = new PasswdGenerator
 
 chromeext = null
@@ -28,7 +29,7 @@ debug = (msg) ->
 verbose = (msg) ->
 	$('#dbginfo').append('<p>' + msg + '</p>')
 
-toggle_debug = ->
+exports.toggle_debug = toggle_debug = ->
 	$('#dbginfo').html ''
 
 gather_input = ->
@@ -55,10 +56,10 @@ get_passwd_option = (site, cb) ->
 	chrome.storage.sync.get(
 		site,
 		(items) ->
-			unless items?
-				cb null
+			if items? && items[site]?
+				cb JSON.parse(items[site])
 				return
-			cb JSON.parse(items[site])
+			cb null
 			return
 	)
 	return
@@ -91,7 +92,7 @@ gen_passwd = (show_note = SHOW_NOTE) ->
 	p = passwdgen.generate input
 	$('#passwd').val p
 	debug('derived key: ' + passwdgen.key)
-	if is_chromeext() && show_note
+	if show_note
 		notify 'Password for <b>' + $('#site').val() + '</b> generated.'
 	return
 
@@ -99,7 +100,6 @@ lastInputTime = new Date(1970, 1, 1)
 delayTime = 300
 
 delay_call = (cb) ->
-	console.log 'delay call'
 	triggerTime = lastInputTime = new Date().getTime()
 	setTimeout(
 		->
@@ -109,22 +109,22 @@ delay_call = (cb) ->
 		, delayTime)
 	return
 
-delay_gen_passwd = ->
+exports.delay_gen_passwd = delay_gen_passwd = ->
 	delay_call gen_passwd
 	return
 
-salt_update = ->
+exports.salt_update = salt_update = ->
 	if is_chromeext()
 		localStorage.salt = $('#salt').val()
 	delay_gen_passwd()
 	return
 
-username_update = ->
+exports.username_update = username_update = ->
 	if is_chromeext()
 		delay_call save_passwd_option
 	return
 
-passwd_option_update = ->
+exports.passwd_option_update = passwd_option_update = ->
 	delay_call ->
 		gen_passwd NO_NOTE
 		save_passwd_option NO_NOTE if is_chromeext()
@@ -132,7 +132,7 @@ passwd_option_update = ->
 		msg += 'Options also saved.' if is_chromeext()
 		notify msg
 
-passwd_onclick = ->
+exports.passwd_onclick = passwd_onclick = ->
 	$(this).select()
 	return
 
@@ -149,7 +149,7 @@ set_tabindex = ->
 	set_one_tabindex id for id in [ 'site', 'salt', 'passphrase', 'passwd', 'username' ]
 	return
 
-ui_init = ->
+exports.init = init = ->
 	console.log 'ui_init'
 	if is_chromeext()
 		if localStorage.salt?
@@ -164,13 +164,3 @@ ui_init = ->
 	else
 		set_tabindex()
 	return
-
-# export functions
-window.toggle_debug = toggle_debug
-window.username_update = username_update
-window.salt_update = salt_update
-window.passwd_option_update = passwd_option_update
-window.passwd_onclick = passwd_onclick
-window.gen_passwd = gen_passwd
-window.delay_gen_passwd = delay_gen_passwd
-window.ui_init = ui_init

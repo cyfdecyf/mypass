@@ -1,4 +1,5 @@
-util = require('./util')
+util = require './util'
+ui = require './ui'
 
 callOnActivePage = (callback) ->
 	chrome.tabs.query({
@@ -12,22 +13,22 @@ callOnActivePage = (callback) ->
 	return
 
 init = ->
-	$('#site').on 'input', delay_gen_passwd
-	$('#salt').on 'input', salt_update
-	$('#passphrase').on 'input', delay_gen_passwd
-	$('#passwd').on 'click', passwd_onclick
-	$('#username').on 'input', username_update
-	$('#num_symbol').on 'change', passwd_option_update
-	$('#length').on 'change', passwd_option_update
-	$('#generation').on 'change', passwd_option_update
-	$('#hashes').on 'change', passwd_option_update
-	$('#dbg').on 'change', toggle_debug
+	$('#site').on 'input', ui.delay_gen_passwd
+	$('#salt').on 'input', ui.salt_update
+	$('#passphrase').on 'input', ui.delay_gen_passwd
+	$('#passwd').on 'click', ui.passwd_onclick
+	$('#username').on 'input', ui.username_update
+	$('#num_symbol').on 'change', ui.passwd_option_update
+	$('#length').on 'change', ui.passwd_option_update
+	$('#generation').on 'change', ui.passwd_option_update
+	$('#hashes').on 'change', ui.passwd_option_update
+	$('#dbg').on 'change', ui.toggle_debug
 	# $("#info").val(window.location.search.substring(1))
 	callOnActivePage((tab) ->
 		# make sure when ui_init is called, site is already filled
 		site = util.parse_site tab.url
 		$('#site').val site
-		ui_init()
+		ui.init()
 		return
 	)
 	return
