@@ -85,17 +85,17 @@ save_passwd_option = (show_note = SHOW_NOTE)->
 gen_passwd = (show_note = SHOW_NOTE) ->
 	if $('#site').val() == '' || $('#salt').val() == '' || $('#passphrase').val() == ''
 		$('#passwd').val ''
-		return
+		return false
 	input = gather_input()
 	p = passwdgen.generate input
 	$('#passwd').val p
 	debug('derived key: ' + passwdgen.key)
 	if show_note
 		notify 'Password for <b>' + $('#site').val() + '</b> generated.'
-	return
+	return true
 
 lastInputTime = new Date(1970, 1, 1)
-delayTime = 300
+delayTime = 500
 
 delay_call = (cb) ->
 	triggerTime = lastInputTime = new Date().getTime()
@@ -118,17 +118,24 @@ exports.salt_update = salt_update = ->
 	return
 
 exports.username_update = username_update = ->
+	return if $('#site').val() == ''
 	if is_chromeext()
 		delay_call save_passwd_option
 	return
 
 exports.passwd_option_update = passwd_option_update = ->
+	site = $('#site').val()
+	return if site == ''
 	delay_call ->
-		gen_passwd NO_NOTE
-		save_passwd_option NO_NOTE if is_chromeext()
-		msg = 'Password for <b>' + $('#site').val() + '</b> generated. <br />'
-		msg += 'Options also saved.' if is_chromeext()
-		notify msg
+		passwd_generated = gen_passwd NO_NOTE
+		msg = "Password for <b>#{site}</b> generated. <br />" if passwd_generated
+		if is_chromeext()
+			save_passwd_option NO_NOTE
+			if msg?
+				msg += "Options also saved."
+			else
+				msg = "Options for <b>#{site}</b> saved."
+		notify msg if msg != ''
 
 exports.passwd_onclick = passwd_onclick = ->
 	$(this).select()
