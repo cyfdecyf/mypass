@@ -1,0 +1,21 @@
+{
+    "name": "mypass",
+    "version": "0.1.0",
+    "description": "Chrome extension for OneShallPass",
+    "dependencies": {
+        "browserify" : "*",
+        "purepack" : "0.0.16"
+    },
+    "devDependencies": {
+    },
+    "scripts": {
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/cyfdecyf/mypass.git"
+    },
+    "homepage": "https://github.com/cyfdecyf/mypass",
+    "keywords": [
+    ],
+    "license": "MIT"
+}

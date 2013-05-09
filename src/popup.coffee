@@ -1,3 +1,5 @@
+util = require('./util')
+
 callOnActivePage = (callback) ->
 	chrome.tabs.query({
 		active: true,
@@ -23,7 +25,7 @@ init = ->
 	# $("#info").val(window.location.search.substring(1))
 	callOnActivePage((tab) ->
 		# make sure when ui_init is called, site is already filled
-		site = parse_site tab.url
+		site = util.parse_site tab.url
 		$('#site').val site
 		ui_init()
 		return
