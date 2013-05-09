@@ -5,11 +5,17 @@ config =
 	pw: { min_size: 8, max_size: 16 }
 
 # many code copied from derive.iced in 1SP
+keymodes =
+  WEB_PW : 0x1
+  LOGIN_PW : 0x2
+  RECORD_AES : 0x3
+  RECORD_HMAC : 0x4
+
 exports.PasswdGenerator = class PasswdGenerator
 	# input should contain following property
 	#     site, generation, num_symbol, length, salt, passphrase, itercnt
 	generate: (input) ->
-		dk = @derive_key(input.salt, input.passphrase, input.itercnt)
+		dk = @derive_web_pw_key input.salt, input.passphrase, input.itercnt
 		i = 0
 		ret = null
 
@@ -24,14 +30,19 @@ exports.PasswdGenerator = class PasswdGenerator
 		x = @add_syms ret, input.num_symbol
 		x[0...input.length]
 
-	derive_key: (salt, passphrase, itercnt) ->
-		# cache derived key for last salt and passphrase pair
-		if @salt == salt && @passphrase == passphrase && @itercnt == itercnt
-			return @key
+	derive_web_pw_key: (salt, passphrase, itercnt) ->
+		# cache derived key for last salt, passphrase, itercnt tuple
+		if @salt != salt || @passphrase != passphrase || @itercnt != itercnt
+			@web_pw_key = @run_key_derivation salt, passphrase, itercnt, keymodes.WEB_PW
+			@salt = salt
+			@passphrase = passphrase
+			@itercnt = itercnt
+		return @web_pw_key
 
+	run_key_derivation: (salt, passphrase, itercnt, key_mode) ->
 		# The initial setup as per PBKDF2, with salt as the salt
 		hmac = C.algo.HMAC.create C.algo.SHA512, passphrase
-		block_index = C.lib.WordArray.create [ 0x1 ] # WEB_PW keymode in 1SP
+		block_index = C.lib.WordArray.create [ key_mode ]
 		block = hmac.update(salt).finalize block_index
 		hmac.reset()
 
@@ -45,11 +56,7 @@ exports.PasswdGenerator = class PasswdGenerator
 			block.words[j] ^= w for w,j in intermediate.words
 			i++
 
-		@key = block
-		@salt = salt
-		@passphrase = passphrase
-		@itercnt = itercnt
-		return @key
+		block
 
 	# Rules for 'OK' passwords:
 	#    - Within the first 8 characters:
