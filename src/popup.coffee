@@ -11,13 +11,14 @@ callOnActivePage = (callback) ->
 
 init = ->
 	$('#site').on 'input', delay_gen_passwd
-	$('#username').on 'input', username_update
+	$('#salt').on 'input', salt_update
 	$('#passphrase').on 'input', delay_gen_passwd
 	$('#passwd').on 'click', passwd_onclick
-	$('#num_symbol').on 'change', gen_passwd
-	$('#length').on 'change', gen_passwd
-	$('#generation').on 'change', gen_passwd
-	$('#hashes').on 'change', delay_gen_passwd
+	$('#username').on 'input', username_update
+	$('#num_symbol').on 'change', passwd_option_update
+	$('#length').on 'change', passwd_option_update
+	$('#generation').on 'change', passwd_option_update
+	$('#hashes').on 'change', passwd_option_update
 	$('#dbg').on 'change', toggle_debug
 	# $("#info").val(window.location.search.substring(1))
 	callOnActivePage((tab) ->

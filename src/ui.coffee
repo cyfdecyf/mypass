@@ -10,6 +10,9 @@ is_chromeext = ->
 NOTIFY_HIDE = true
 NOTIFY_NO_HIDE = false
 
+SHOW_NOTE = true
+NO_NOTE = false
+
 notify = (msg, hide = NOTIFY_HIDE) ->
 	info = $('#info').html(msg).show()
 	if hide
@@ -30,13 +33,14 @@ toggle_debug = ->
 
 gather_input = ->
 	{
-		username: $('#username').val()
-		passphrase: $('#passphrase').val()
-		itercnt: 1 << Number($('#hashes').val())
+		salt: $('#salt').val()
 		site: $('#site').val()
-		generation: Number($('#generation').val())
+		passphrase: $('#passphrase').val()
+		username: $('#username').val()
 		num_symbol: Number($('#num_symbol').val())
 		length: Number($('#length').val())
+		generation: Number($('#generation').val())
+		itercnt: 1 << Number($('#hashes').val())
 	}
 
 update_passwd_option = (opt) ->
@@ -59,7 +63,8 @@ get_passwd_option = (site, cb) ->
 	)
 	return
 
-save_passwd_option = (input) ->
+save_passwd_option = (show_note = SHOW_NOTE)->
+	input = gather_input()
 	optjson = JSON.stringify {
 		uname: input.username
 		nsym: input.num_symbol
@@ -72,46 +77,60 @@ save_passwd_option = (input) ->
 		obj,
 		->
 			if chrome.runtime.lastError?
-				notify "Password for <b>#{input.site}</b> generated. <br />" +
-					"Options save error: #{chrome.runtime.lastError}"
-			else
-				notify "Password for <b>#{input.site}</b> generated. <br />" +
-					"Options saved."
+				notify "Options save error: #{chrome.runtime.lastError}"
+			else if show_note
+				notify "Options for <b>#{input.site}</b> saved."
 	)
 	return
 
-gen_passwd = ->
-	if $('#site').val() == '' || $('#username').val() == '' || $('#passphrase').val() == ''
+gen_passwd = (show_note = SHOW_NOTE) ->
+	if $('#site').val() == '' || $('#salt').val() == '' || $('#passphrase').val() == ''
 		$('#passwd').val ''
 		return
 	input = gather_input()
 	p = passwdgen.generate input
 	$('#passwd').val p
 	debug('derived key: ' + passwdgen.key)
-	if is_chromeext()
-		save_passwd_option input
-	else
-		notify 'Password for <b>' + $('#site').val() + '</b> generated'
+	if is_chromeext() && show_note
+		notify 'Password for <b>' + $('#site').val() + '</b> generated.'
 	return
 
 lastInputTime = new Date(1970, 1, 1)
 delayTime = 300
 
-delay_gen_passwd = ->
+delay_call = (cb) ->
+	console.log 'delay call'
 	triggerTime = lastInputTime = new Date().getTime()
 	setTimeout(
 		->
 			if triggerTime == lastInputTime
-				gen_passwd()
+				cb()
 				return
 		, delayTime)
 	return
 
-username_update = ->
+delay_gen_passwd = ->
+	delay_call gen_passwd
+	return
+
+salt_update = ->
 	if is_chromeext()
-		localStorage.username = $('#username').val()
+		localStorage.salt = $('#salt').val()
 	delay_gen_passwd()
 	return
+
+username_update = ->
+	if is_chromeext()
+		delay_call save_passwd_option
+	return
+
+passwd_option_update = ->
+	delay_call ->
+		gen_passwd NO_NOTE
+		save_passwd_option NO_NOTE if is_chromeext()
+		msg = 'Password for <b>' + $('#site').val() + '</b> generated. <br />'
+		msg += 'Options also saved.' if is_chromeext()
+		notify msg
 
 passwd_onclick = ->
 	$(this).select()
@@ -172,13 +191,14 @@ set_tabindex = ->
 			e.focus() if index == 1
 			index++
 			return
-	set_one_tabindex id for id in [ 'site', 'username', 'passphrase', 'passwd' ]
+	set_one_tabindex id for id in [ 'site', 'salt', 'passphrase', 'passwd', 'username' ]
 	return
 
 ui_init = ->
 	console.log 'ui_init'
-	if is_chromeext() && localStorage.username? && localStorage.username != ''
-		$('#username').val localStorage.username
+	if is_chromeext()
+		if localStorage.salt?
+			$('#salt').val localStorage.salt
 	site = $('#site').val()
 	if site != ''
 		get_passwd_option site, (opt) ->
@@ -193,6 +213,8 @@ ui_init = ->
 # export functions
 window.toggle_debug = toggle_debug
 window.username_update = username_update
+window.salt_update = salt_update
+window.passwd_option_update = passwd_option_update
 window.passwd_onclick = passwd_onclick
 window.gen_passwd = gen_passwd
 window.delay_gen_passwd = delay_gen_passwd

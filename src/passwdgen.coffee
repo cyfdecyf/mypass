@@ -6,14 +6,14 @@ config =
 # many code copied from derive.iced in 1SP
 class PasswdGenerator
 	# input should contain following property
-	#     site, generation, num_symbol, length, username, passphrase, itercnt
+	#     site, generation, num_symbol, length, salt, passphrase, itercnt
 	generate: (input) ->
-		dk = @derive_key(input.username, input.passphrase, input.itercnt)
+		dk = @derive_key(input.salt, input.passphrase, input.itercnt)
 		i = 0
 		ret = null
 
 		until ret
-			a = [ "OneShallPass v2.0", input.username, input.site, input.generation, i ]
+			a = [ "OneShallPass v2.0", input.salt, input.site, input.generation, i ]
 			wa = pack_to_word_array a
 			hash = C.HmacSHA512 wa, dk
 			b64 = hash.toString C.enc.Base64
@@ -23,15 +23,15 @@ class PasswdGenerator
 		x = @add_syms ret, input.num_symbol
 		x[0...input.length]
 
-	derive_key: (username, passphrase, itercnt) ->
-		# cache derived key for last username and passphrase pair
-		if @username == username && @passphrase == passphrase && @itercnt == itercnt
+	derive_key: (salt, passphrase, itercnt) ->
+		# cache derived key for last salt and passphrase pair
+		if @salt == salt && @passphrase == passphrase && @itercnt == itercnt
 			return @key
 
-		# The initial setup as per PBKDF2, with username as the salt
+		# The initial setup as per PBKDF2, with salt as the salt
 		hmac = C.algo.HMAC.create C.algo.SHA512, passphrase
 		block_index = C.lib.WordArray.create [ 0x1 ] # WEB_PW keymode in 1SP
-		block = hmac.update(username).finalize block_index
+		block = hmac.update(salt).finalize block_index
 		hmac.reset()
 
 		# Make a copy of the original block....
@@ -45,7 +45,7 @@ class PasswdGenerator
 			i++
 
 		@key = block
-		@username = username
+		@salt = salt
 		@passphrase = passphrase
 		@itercnt = itercnt
 		return @key
