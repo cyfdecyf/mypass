@@ -17,3 +17,4 @@ You need [Node.js](http://nodejs.org/) installed and file systems that supports 
 
 The password generation code is mostly copied from 1SP.
 
+Icon designed by @naruil.
