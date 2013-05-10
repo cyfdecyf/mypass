@@ -6,4 +6,5 @@ all: bundle
 bundle:
 	cake build
 	$(BROWSERIFY) js/popup.js -o Chrome/js/popup-bundle.js
+	$(BROWSERIFY) js/options.js -o Chrome/js/options-bundle.js
 	$(BROWSERIFY) js/standalone.js -o js/standalone-bundle.js

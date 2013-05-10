@@ -13,5 +13,6 @@
     },
     "default_popup": "popup.html?init=1"
   },
+  "options_page": "options.html",
   "permissions": [ "tabs", "storage" ]
 }
