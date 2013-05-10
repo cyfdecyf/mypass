@@ -30,12 +30,18 @@ save_site_options = (show_note = true)->
 	return
 
 load_site_options = ->
+	# make sure set_tabindex is called before return
 	site = $('#site').val()
-	return if site == ''
-	util.storage.sync.get site, (value) ->
-		return unless value?
-		options.update_ui JSON.parse(value)
-		util.notify "Password option for <b>#{site}</b> loaded.", util.NOTIFY_NO_HIDE
+	console.log "loading options for #{site}"
+	if site == ''
+		set_tabindex()
+		return
+	util.storage.sync.get site, (json) ->
+		if json?
+			opt = JSON.parse(json)
+			console.log "loaded options for #{site}: #{json}"
+			options.update_ui opt
+			util.notify "Password option for <b>#{site}</b> loaded.", util.NOTIFY_NO_HIDE
 		set_tabindex()
 
 gen_passwd = (show_note = true) ->
@@ -114,5 +120,8 @@ exports.init = init = ->
 		$('#salt').val localStorage.salt if localStorage.salt?
 		# this is awkward, inorder to make sure default option loaded before site options
 		options.load load_site_options
-	set_tabindex()
+	else
+		# load_site_options will set tab index
+		# this is awkward too because set_tabindex should be called after site options is updated
+		set_tabindex()
 	return

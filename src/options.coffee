@@ -9,6 +9,7 @@ exports.default_options = default_options =
 exports.options_key = options_key = '##mypass_options##'
 
 exports.update_ui = update_ui = (opt) ->
+	$('#username').val opt.uname if opt.uname?
 	$('#num_symbol').val opt.nsym if opt.nsym?
 	$('#length').val opt.len if opt.len?
 	$('#generation').val opt.gen if opt.gen?
@@ -37,11 +38,11 @@ exports.load = load_options  = (cb = null) ->
 
 $ ->
 	return unless util.is_chromeext()
-	load_options()
-	# if called in popup page, no need to bind save_options
+	# if called in popup page, no need to run the following
 	return unless window.location.href.indexOf('popup.html') == -1
 	$('#num_symbol').on 'change', save_options
 	$('#length').on 'change', save_options
 	$('#generation').on 'change', save_options
 	$('#hashes').on 'change', save_options
+	load_options()
 	return
