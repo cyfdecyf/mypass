@@ -84,7 +84,7 @@ load_site_options = ->
 		set_tabindex()
 
 ##################################################
-# Password generation
+# Event handlers
 ##################################################
 
 gen_passwd = (show_note = true) ->
@@ -97,10 +97,6 @@ gen_passwd = (show_note = true) ->
 	if show_note
 		util.notify 'Password for <b>' + $('#site').val() + '</b> generated.'
 	return true
-
-##################################################
-# Event handlers
-##################################################
 
 lastInputTime = new Date(1970, 1, 1)
 delayTime = 500
@@ -133,16 +129,15 @@ exports.username_update = username_update = ->
 exports.passwd_option_update = passwd_option_update = ->
 	site = $('#site').val()
 	return if site == ''
-	delay_call ->
-		passwd_generated = gen_passwd util.NO_NOTE
-		msg = "Password for <b>#{site}</b> generated. <br />" if passwd_generated
-		if util.is_chromeext()
-			save_site_options util.NO_NOTE
-			if msg?
-				msg += "Options also saved."
-			else
-				msg = "Options for <b>#{site}</b> saved."
-		util.notify msg if msg != ''
+	passwd_generated = gen_passwd util.NO_NOTE
+	msg = "Password for <b>#{site}</b> generated. <br />" if passwd_generated
+	if util.is_chromeext()
+		save_site_options util.NO_NOTE
+		if msg?
+			msg += "Options also saved."
+		else
+			msg = "Options for <b>#{site}</b> saved."
+	util.notify msg if msg != ''
 
 exports.passwd_onclick = passwd_onclick = ->
 	$(this).select()
