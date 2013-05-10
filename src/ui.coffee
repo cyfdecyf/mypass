@@ -55,6 +55,9 @@ exports.load_default_options = load_default_options = ->
 		console.log "default options #{JSON.stringify(opt)}"
 		load_site_options() if $('#site')?
 
+# Whether the site's password options has ever been saved.
+site_option_saved = false
+
 save_site_options = (show_note = true)->
 	input = gather_input()
 	optjson = JSON.stringify {
@@ -66,6 +69,7 @@ save_site_options = (show_note = true)->
 	obj = {}
 	obj[input.site] = optjson
 	util.storage.sync.set obj, "Options for <b>#{input.site}</b>", show_note
+	site_option_saved = true
 	return
 
 load_site_options = ->
@@ -77,10 +81,11 @@ load_site_options = ->
 		return
 	util.storage.sync.get site, (json) ->
 		if json?
+			site_option_saved = true
 			opt = JSON.parse(json)
 			console.log "loaded options for #{site}: #{json}"
 			update_passwd_options opt
-			util.notify "Password option for <b>#{site}</b> loaded.", util.NOTIFY_NO_HIDE
+			util.notify "Password option for <b>#{site}</b> loaded.", util.NOTIFY_KEEP
 		set_tabindex()
 
 ##################################################
@@ -88,14 +93,22 @@ load_site_options = ->
 ##################################################
 
 gen_passwd = (show_note = true) ->
-	if $('#site').val() == '' || $('#salt').val() == '' || $('#passphrase').val() == ''
+	site = $('#site').val()
+	if site  == '' || $('#salt').val() == '' || $('#passphrase').val() == ''
 		$('#passwd').val ''
 		return false
 	input = gather_input()
 	p = passwdgen.generate input
 	$('#passwd').val p
-	if show_note
-		util.notify 'Password for <b>' + $('#site').val() + '</b> generated.'
+
+	msg = "Password for <b>#{site}</b> generated. <br />"
+	# If this site has never been saved, save it's options now.
+	# This allows user to change default password options
+	# without forgeting options for already used sites.
+	unless site_option_saved
+		save_site_options util.NO_NOTE
+		msg += "Options also saved."
+	util.notify msg if show_note
 	return true
 
 lastInputTime = new Date(1970, 1, 1)
