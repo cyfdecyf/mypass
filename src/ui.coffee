@@ -1,4 +1,3 @@
-options = require './options'
 util = require './util'
 
 PasswdGenerator = require('./passwdgen').PasswdGenerator
@@ -15,6 +14,46 @@ gather_input = ->
 		generation: Number($('#generation').val())
 		itercnt: 1 << Number($('#hashes').val())
 	}
+
+##################################################
+# Save/Load default and site password options
+##################################################
+
+options_key = '##mypass_options##'
+
+exports.default_options = default_options =
+	nsym: 0
+	len: 12
+	gen: 1
+	hashes: 8
+
+# update password options on page
+exports.update_passwd_options = update_passwd_options = (opt) ->
+	$('#username')?.val opt.uname if opt.uname?
+	$('#num_symbol')?.val opt.nsym if opt.nsym?
+	$('#length')?.val opt.len if opt.len?
+	$('#generation')?.val opt.gen if opt.gen?
+	$('#hashes')?.val opt.hashes if opt.hashes?
+	return
+
+exports.save_default_options = ->
+	obj = {}
+	obj[options_key] = JSON.stringify {
+		nsym: $('#num_symbol').val()
+		len: $('#length').val()
+		hashes: $('#hashes').val()
+	}
+	util.storage.sync.set obj, 'Password options'
+
+exports.load_default_options = load_default_options = ->
+	util.storage.sync.get options_key, (json) ->
+		opt = default_options
+		if json?
+			console.log 'default options loaded'
+			opt = JSON.parse json
+		update_passwd_options opt
+		console.log "default options #{JSON.stringify(opt)}"
+		load_site_options() if $('#site')?
 
 save_site_options = (show_note = true)->
 	input = gather_input()
@@ -40,9 +79,13 @@ load_site_options = ->
 		if json?
 			opt = JSON.parse(json)
 			console.log "loaded options for #{site}: #{json}"
-			options.update_ui opt
+			update_passwd_options opt
 			util.notify "Password option for <b>#{site}</b> loaded.", util.NOTIFY_NO_HIDE
 		set_tabindex()
+
+##################################################
+# Password generation
+##################################################
 
 gen_passwd = (show_note = true) ->
 	if $('#site').val() == '' || $('#salt').val() == '' || $('#passphrase').val() == ''
@@ -54,6 +97,10 @@ gen_passwd = (show_note = true) ->
 	if show_note
 		util.notify 'Password for <b>' + $('#site').val() + '</b> generated.'
 	return true
+
+##################################################
+# Event handlers
+##################################################
 
 lastInputTime = new Date(1970, 1, 1)
 delayTime = 500
@@ -101,6 +148,10 @@ exports.passwd_onclick = passwd_onclick = ->
 	$(this).select()
 	return
 
+##################################################
+# Initialization
+##################################################
+
 set_tabindex = ->
 	index = 1
 	set_one_tabindex = (id) ->
@@ -118,8 +169,7 @@ exports.init = init = ->
 	if util.is_chromeext()
 		console.log 'in chromeext'
 		$('#salt').val localStorage.salt if localStorage.salt?
-		# this is awkward, inorder to make sure default option loaded before site options
-		options.load load_site_options
+		load_default_options()
 	else
 		# load_site_options will set tab index
 		# this is awkward too because set_tabindex should be called after site options is updated
