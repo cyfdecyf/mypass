@@ -37,9 +37,11 @@ exports.load = load_options  = (cb = null) ->
 
 $ ->
 	return unless util.is_chromeext()
+	load_options()
+	# if called in popup page, no need to bind save_options
+	return unless window.location.href.indexOf('popup.html') == -1
 	$('#num_symbol').on 'change', save_options
 	$('#length').on 'change', save_options
 	$('#generation').on 'change', save_options
 	$('#hashes').on 'change', save_options
-	load_options()
 	return
