@@ -29,11 +29,11 @@ exports.default_options = default_options =
 
 # update password options on page
 exports.update_passwd_options = update_passwd_options = (opt) ->
-	$('#username')?.val opt.uname if opt.uname?
-	$('#num_symbol')?.val opt.nsym if opt.nsym?
-	$('#length')?.val opt.len if opt.len?
-	$('#generation')?.val opt.gen if opt.gen?
-	$('#hashes')?.val opt.hashes if opt.hashes?
+	$('#username').val opt.uname if opt.uname?
+	$('#num_symbol').val opt.nsym if opt.nsym?
+	$('#length').val opt.len if opt.len?
+	$('#generation').val opt.gen if opt.gen?
+	$('#hashes').val opt.hashes if opt.hashes?
 	return
 
 exports.save_default_options = ->
@@ -53,7 +53,7 @@ exports.load_default_options = load_default_options = ->
 			opt = JSON.parse json
 		update_passwd_options opt
 		console.log "default options #{JSON.stringify(opt)}"
-		load_site_options() if $('#site')?
+		load_site_options() if $('#site').val()?
 
 # Whether the site's password options has ever been saved.
 site_option_saved = false
