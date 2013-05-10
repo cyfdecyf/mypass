@@ -4,18 +4,6 @@ util = require './util'
 PasswdGenerator = require('./passwdgen').PasswdGenerator
 passwdgen = new PasswdGenerator
 
-debug_on = ->
-	$('#dbg').is ':checked'
-
-debug = (msg) ->
-	$('#dbginfo').append("<p>#{msg}</p>") if debug_on()
-
-verbose = (msg) ->
-	$('#dbginfo').append("<p>#{msg}</p>")
-
-exports.toggle_debug = toggle_debug = ->
-	$('#dbginfo').html ''
-
 gather_input = ->
 	{
 		salt: $('#salt').val()
@@ -57,7 +45,6 @@ gen_passwd = (show_note = true) ->
 	input = gather_input()
 	p = passwdgen.generate input
 	$('#passwd').val p
-	debug('derived key: ' + passwdgen.key)
 	if show_note
 		util.notify 'Password for <b>' + $('#site').val() + '</b> generated.'
 	return true
