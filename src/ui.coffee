@@ -1,3 +1,4 @@
+{config} = require './config'
 util = require './util'
 
 PasswdGenerator = require('./passwdgen').PasswdGenerator
@@ -19,14 +20,6 @@ gather_input = ->
 # Save/Load default and site password options
 ##################################################
 
-options_key = '##mypass_options##'
-
-exports.default_options = default_options =
-	nsym: 0
-	len: 12
-	gen: 1
-	hashes: 8
-
 # update password options on page
 exports.update_passwd_options = update_passwd_options = (opt) ->
 	$('#username').val opt.uname if opt.uname?
@@ -38,7 +31,7 @@ exports.update_passwd_options = update_passwd_options = (opt) ->
 
 exports.save_default_options = ->
 	obj = {}
-	obj[options_key] = JSON.stringify {
+	obj[config.options_key] = JSON.stringify {
 		nsym: $('#num_symbol').val()
 		len: $('#length').val()
 		hashes: $('#hashes').val()
@@ -46,8 +39,8 @@ exports.save_default_options = ->
 	util.storage.sync.set obj, 'Password options'
 
 exports.load_default_options = load_default_options = ->
-	util.storage.sync.get options_key, (json) ->
-		opt = default_options
+	util.storage.sync.get config.options_key, (json) ->
+		opt = config.options.default
 		if json?
 			console.log 'default options loaded'
 			opt = JSON.parse json
@@ -105,7 +98,7 @@ gen_passwd = (show_note = true) ->
 	# If this site has never been saved, save it's options now.
 	# This allows user to change default password options
 	# without forgeting options for already used sites.
-	unless site_option_saved
+	if util.is_chromeext() && !site_option_saved
 		save_site_options util.NO_NOTE
 		msg += "Options also saved."
 	util.notify msg if show_note

@@ -1,8 +1,6 @@
+{config} = require './config'
 purepack = require 'purepack'
 C = if CryptoJS? then CryptoJS else null
-
-config =
-	pw: { min_size: 8, max_size: 16 }
 
 # many code copied from derive.iced in 1SP
 keymodes =
