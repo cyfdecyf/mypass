@@ -9,7 +9,6 @@ gather_input = ->
 		salt: $('#salt').val()
 		site: $('#site').val()
 		passphrase: $('#passphrase').val()
-		username: $('#username').val()
 		num_symbol: Number($('#num_symbol').val())
 		length: Number($('#length').val())
 		generation: Number($('#generation').val())
@@ -29,14 +28,21 @@ exports.update_passwd_options = update_passwd_options = (opt) ->
 	$('#hashes').val opt.hashes if opt.hashes?
 	return
 
-exports.save_default_options = ->
-	obj = {}
-	obj[config.options_key] = JSON.stringify {
+save_options = (site, msg, show_note = true) ->
+	opt =
 		nsym: $('#num_symbol').val()
 		len: $('#length').val()
+		gen: $('#generation').val()
 		hashes: $('#hashes').val()
-	}
-	util.storage.sync.set obj, 'Password options'
+	username = $('#username').val()
+	if username? && username != ""
+		opt.uname = username
+	obj = {}
+	obj[site] = JSON.stringify opt
+	util.storage.sync.set obj, msg, show_note
+
+exports.save_default_options = ->
+	save_options config.options_key, 'Password options'
 
 exports.load_default_options = load_default_options = ->
 	util.storage.sync.get config.options_key, (json) ->
@@ -52,26 +58,18 @@ exports.load_default_options = load_default_options = ->
 site_option_saved = false
 
 save_site_options = (show_note = true)->
-	input = gather_input()
-	optjson = JSON.stringify {
-		uname: input.username
-		nsym: input.num_symbol
-		len: input.length
-		gen: input.generation
-	}
-	obj = {}
-	obj[input.site] = optjson
-	util.storage.sync.set obj, "Options for <b>#{input.site}</b>", show_note
+	site = $('#site').val()
+	save_options site, "Options for <b>#{site}</b>", show_note
 	site_option_saved = true
 	return
 
 load_site_options = ->
 	# make sure set_tabindex is called before return
 	site = $('#site').val()
-	console.log "loading options for #{site}"
 	if site == ''
 		set_tabindex()
 		return
+	console.log "loading options for #{site}"
 	util.storage.sync.get site, (json) ->
 		if json?
 			site_option_saved = true
