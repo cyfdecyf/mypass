@@ -26,6 +26,6 @@ watch = () ->
 task 'watch', 'Watch src/ for changes', ->
   watch()
 
-task 'build', 'Build Chrome/js from src/', ->
+task 'build', 'Build js/ from src/', ->
   build()
 

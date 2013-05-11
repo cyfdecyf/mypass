@@ -1,4 +1,4 @@
-util = require './util'
+util = require './lib/util'
 ui = require './ui'
 
 callOnActivePage = (callback) ->

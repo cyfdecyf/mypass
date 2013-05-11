@@ -1,7 +1,7 @@
-{config} = require './config'
-util = require './util'
+{config} = require './lib/config'
+util = require './lib/util'
 
-PasswdGenerator = require('./passwdgen').PasswdGenerator
+PasswdGenerator = require('./lib/passwdgen').PasswdGenerator
 passwdgen = new PasswdGenerator
 
 gather_input = ->
