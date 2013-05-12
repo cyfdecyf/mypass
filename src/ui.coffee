@@ -83,7 +83,7 @@ load_site_options = ->
 # Event handlers
 ##################################################
 
-gen_passwd = (show_note = true) ->
+exports.gen_passwd = gen_passwd = (show_note = true) ->
 	site = $('#site').val()
 	if site  == '' || $('#salt').val() == '' || $('#passphrase').val() == ''
 		$('#passwd').val ''
@@ -141,7 +141,7 @@ exports.passwd_option_update = ->
 	msg = "Password for <b>#{site}</b> generated. <br />" if passwd_generated
 	if util.is_chromeext()
 		save_site_options util.NO_NOTE
-		if msg?
+		if passwd_generated
 			msg += "Options also saved."
 		else
 			msg = "Options for <b>#{site}</b> saved."
@@ -169,9 +169,9 @@ set_tabindex = ->
 	return
 
 exports.init = init = ->
+	$('#salt').val localStorage.salt if localStorage.salt?
 	if util.is_chromeext()
 		console.log 'in chromeext'
-		$('#salt').val localStorage.salt if localStorage.salt?
 		load_default_options()
 	else
 		# load_site_options will set tab index
