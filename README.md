@@ -1,5 +1,7 @@
 **MyPass** is a Chrome extension to *generate different passwords for different sites with **a single passphrase***. It uses the same algorithm as [One Shall Pass](https://oneshallpass.com/) (1SP) to generate password.
 
+Install from [Chrome Web Store](https://chrome.google.com/webstore/detail/pbaehcadchmngjeahmifjonliaaidgdj).
+
 # Technical information
 
 ## About the options
@@ -26,7 +28,7 @@ The password generation algorithm is the same as 1SP. Basically, a
 email as the salt. That key is then used in HMAC-SHA512 to generate
 password for each site. For the detailed algorithm and how secure it is, please refer to 1SP's [README](https://github.com/maxtaco/oneshallpass/blob/master/README.md).
 
-## How is site options stored?
+## How are site options stored?
 
 Site options are stored in Chrome extension storage. `chrome.storage.sync` is used so these options will be automatically synchronized.
 
