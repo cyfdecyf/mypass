@@ -13,7 +13,14 @@ callOnActivePage = (callback) ->
 	return
 
 init = ->
-	$('#site').on 'input', ui.delay_gen_passwd
+	callOnActivePage((tab) ->
+		# make sure when ui_init is called, site is already filled
+		site = util.parse_site tab.url
+		$('#site').val site
+		ui.init()
+		return
+	)
+	$('#site').on 'input', ui.site_update
 	$('#salt').on 'input', ui.salt_update
 	$('#passphrase').on 'input', ui.delay_gen_passwd
 	$('#passwd').on 'click', ui.passwd_onclick
@@ -22,13 +29,6 @@ init = ->
 	$('#num_symbol').on 'change', ui.passwd_option_update
 	$('#length').on 'change', ui.passwd_option_update
 	$('#generation').on 'change', ui.passwd_option_update
-	callOnActivePage((tab) ->
-		# make sure when ui_init is called, site is already filled
-		site = util.parse_site tab.url
-		$('#site').val site
-		ui.init()
-		return
-	)
 	return
 
 $(document).on('DOMContentLoaded', init)

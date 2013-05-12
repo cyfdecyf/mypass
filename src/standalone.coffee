@@ -1,6 +1,7 @@
 ui = require './ui'
 
 $ ->
+	ui.init()
 	$('#site').on 'input', ui.delay_gen_passwd
 	$('#salt').on 'input', ui.salt_update
 	$('#passphrase').on 'input', ui.delay_gen_passwd
@@ -10,5 +11,4 @@ $ ->
 	$('#generation').on 'change', ui.passwd_option_update
 	$('#hashes').on 'change', ui.passwd_option_update
 	$('#dbg').on 'change', ui.toggle_debug
-	ui.init()
 	return

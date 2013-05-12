@@ -115,22 +115,26 @@ delay_call = (cb) ->
 		, delayTime)
 	return
 
+exports.site_update = ->
+	site_option_saved = false
+	delay_call gen_passwd
+
 exports.delay_gen_passwd = delay_gen_passwd = ->
 	delay_call gen_passwd
 	return
 
-exports.salt_update = salt_update = ->
+exports.salt_update = ->
 	localStorage.salt = $('#salt').val()
 	delay_gen_passwd()
 	return
 
-exports.username_update = username_update = ->
+exports.username_update = ->
 	return if $('#site').val() == ''
 	if util.is_chromeext()
 		delay_call save_site_options
 	return
 
-exports.passwd_option_update = passwd_option_update = ->
+exports.passwd_option_update = ->
 	site = $('#site').val()
 	return if site == ''
 	passwd_generated = gen_passwd util.NO_NOTE
@@ -143,7 +147,7 @@ exports.passwd_option_update = passwd_option_update = ->
 			msg = "Options for <b>#{site}</b> saved."
 	util.notify msg if msg != ''
 
-exports.passwd_onclick = passwd_onclick = ->
+exports.passwd_onclick = ->
 	$(this).select()
 	return
 

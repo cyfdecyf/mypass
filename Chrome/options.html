@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- css -->
 	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-	<link href="css/options.css" rel="stylesheet">
+	<link href="css/options.css" rel="stylesheet" media="screen">
 	<!-- javascript -->
 	<script src="js/jquery.js"></script>
 	<script src="js/options-bundle.js"></script>
@@ -75,29 +75,23 @@
 
 		<hr />
 
-		<p>Manage stored site specific options (TBD):</p>
+		<p>Manage site options:</p>
 
-		<form class="form-horizontal">
-			<div class="control-group">
-				<label class="control-label" for="salt">Email (Salt)</label>
-				<div class="controls">
-					<input type="text" class="input-large" id="salt" placeholder="hello@world.com">
-				</div>
-			</div>
-
-			<div class="control-group">
-				<label class="control-label" for="passphrase">Passphrase</label>
-				<div class="controls">
-					<input type="password" class="input-large" id="passphrase" placeholder="Your Secret">
-				</div>
-			</div>
-
-			<div class="control-group">
-				<div class="controls">
-					<button class="btn" id="show">Show</button>
-				</div>
-			</div>
-		</form>
+		<table class="table table-bordered table-striped table-hover">
+			<thead>
+				<tr>
+					<th>Site</th>
+					<th>User name</th>
+					<th>Sym</th>
+					<th>Len</th>
+					<th>Gen</th>
+					<th>Hash</th>
+					<th><span class="invisible">pad__</span></th>
+				</tr>
+			</thead>
+			<tbody id="site-opt">
+			</tbody>
+		</table>
 
 		<!-- for js to find whether it's running as chrome extension -->
 		<div id="chromeext" class="hide"></div>
