@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "MyPass",
-  "description": "Keep password by yourself",
-  "version": "0.1",
+  "description": "Generate different passwords for different sites with a single passphrase.",
+  "version": "1.0",
   "icons": {
     "128": "icon-128.png"
   },
@@ -11,7 +11,7 @@
       "19": "icon-19.png",
       "38": "icon-38.png"
     },
-    "default_popup": "popup.html?init=1"
+    "default_popup": "popup.html"
   },
   "options_page": "options.html",
   "permissions": [ "tabs", "storage" ]
