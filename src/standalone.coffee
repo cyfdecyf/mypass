@@ -10,5 +10,4 @@ $ ->
 	$('#length').on 'change', ui.passwd_option_update
 	$('#generation').on 'change', ui.passwd_option_update
 	$('#hashes').on 'change', ui.passwd_option_update
-	$('#dbg').on 'change', ui.toggle_debug
 	return
