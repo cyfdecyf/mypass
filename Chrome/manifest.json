@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "MyPass",
   "description": "Generate different passwords for different sites with a single passphrase.",
-  "version": "1.0",
+  "version": "1.1",
   "icons": {
     "128": "icon-128.png"
   },
