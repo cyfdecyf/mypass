@@ -47,13 +47,9 @@ exports.parse_site = parse_site = (url) ->
 # Extension detection
 #################################################
 
-chromeext = null
-
 # make this global
 exports.is_chromeext = is_chromeext = ->
-	if chromeext == null
-		chromeext = $('#chromeext').length != 0
-	chromeext
+	chrome? && chrome.storage?
 
 #################################################
 # Storage
