@@ -8,9 +8,7 @@
 	<link rel="icon" type="image/png" href="icons/icon-32.png" />
 	<style type="text/css" media="screen">
 	.container {
-    	width: auto;
-		max-width: 400px;
-		margin-top: 15px;
+    	width: 330px;
 	}
 	.page-header {
 		text-align: center;
@@ -49,14 +47,14 @@
 			<div class="control-group">
 				<label class="control-label" for="salt">Salt</label>
 				<div class="controls">
-					<input type="text" class="input-large" id="salt" placeholder="Your email or anything you like">
+					<input type="text" class="input-block-level" id="salt" placeholder="Your email or anything you like">
 				</div>
 			</div>
 
 			<div class="control-group">
 				<label class="control-label" for="passphrase">Passphrase</label>
 				<div class="controls">
-					<input type="password" class="input-large" id="passphrase" placeholder="Your Secret">
+					<input type="password" class="input-block-level" id="passphrase" placeholder="Your Secret">
 				</div>
 			</div>
 
@@ -65,14 +63,14 @@
 			<div class="control-group">
 				<label class="control-label" for="site">Site</label>
 				<div class="controls">
-					<input type="text" class="input-large" id="site" placeholder="example.com">
+					<input type="text" class="input-block-level" id="site" placeholder="example.com">
 				</div>
 			</div>
 
 			<div class="control-group">
 				<label class="control-label" for="passwd">Password</label>
 				<div class="controls">
-					<input type="text" class="input-large" id="passwd" placeholder="Press TAB to select" readonly>
+					<input type="text" class="input-block-level" id="passwd" placeholder="Press TAB to select" readonly>
 				</div>
 			</div>
 
@@ -81,7 +79,7 @@
 			<div class="control-group">
 				<label class="control-label" for="num_symbol">Symbols</label>
 				<div class="controls">
-					<select id="num_symbol">
+					<select class="input-block-level" id="num_symbol">
 						<option>0</option>
 						<option>1</option>
 						<option>2</option>
@@ -93,7 +91,7 @@
 			<div class="control-group">
 				<label class="control-label" for="length">Length</label>
 				<div class="controls">
-					<select id="length">
+					<select class="input-block-level" id="length">
 						<option>8</option>
 						<option>9</option>
 						<option>10</option>
@@ -114,7 +112,7 @@
 			<div class="control-group">
 				<label class="control-label" for="generation">Generation</label>
 				<div class="controls">
-					<select id="generation">
+					<select class="input-block-level" id="generation">
 						<option>1</option>
 						<option>2</option>
 						<option>3</option>
@@ -142,7 +140,7 @@
 			<div class="control-group">
 				<label class="control-label" for="hashes">Hashes</label>
 				<div class="controls">
-					<select id="hashes">
+					<select class="input-block-level" id="hashes">
 						<option value="1">2^1</option>
 						<option value="2">2^2</option>
 						<option value="3">2^3</option>
@@ -163,6 +161,12 @@
 				</div>
 			</div>
 		</form>
+
+		<div class="muted credit" id="credit">
+			<p>There's also an iOS optimized <a href="ios.html">version</a>.</p>
+			<p>Created by <a href="http://chenyufei.info">Chen Yufei</a>,
+				project page is on <a href="https://github.com/cyfdecyf/mypass">github</a>.</p>
+		</div>
 
 		<div id="info" class="text-center text-info"></div>
 	</div>

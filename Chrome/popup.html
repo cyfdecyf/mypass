@@ -8,9 +8,9 @@
 	<link href="css/popup.css" rel="stylesheet" media="screen">
 	<style type="text/css" media="screen">
 	.container {
-		width: 330px;
+		width: 300px;
 		margin-top: 15px;
-		margin-bottom: 5px;
+		margin-right: 15px;
 	}
 	.form-horizontal .control-label {
 		float: left;
@@ -50,14 +50,14 @@
 			<div class="control-group">
 				<label class="control-label" for="salt">Salt</label>
 				<div class="controls">
-					<input type="text" class="input-large" id="salt" placeholder="Your email or anything you like">
+					<input type="text" class="input-block-level" id="salt" placeholder="Your email or anything you like">
 				</div>
 			</div>
 
 			<div class="control-group">
 				<label class="control-label" for="passphrase">Passphrase</label>
 				<div class="controls">
-					<input type="password" class="input-large" id="passphrase" placeholder="Your Secret">
+					<input type="password" class="input-block-level" id="passphrase" placeholder="Your Secret">
 				</div>
 			</div>
 
@@ -66,14 +66,14 @@
 			<div class="control-group">
 				<label class="control-label" for="site">Site</label>
 				<div class="controls">
-					<input type="text" class="input-large" id="site" placeholder="example.com">
+					<input type="text" class="input-block-level" id="site" placeholder="example.com">
 				</div>
 			</div>
 
 			<div class="control-group">
 				<label class="control-label" for="passwd">Password</label>
 				<div class="controls">
-					<input type="text" class="input-large" id="passwd" placeholder="Press TAB to select" readonly>
+					<input type="text" class="input-block-level" id="passwd" placeholder="Press TAB to select" readonly>
 				</div>
 			</div>
 
@@ -82,14 +82,14 @@
 			<div class="control-group">
 				<label class="control-label" for="username">User name</label>
 				<div class="controls">
-					<input type="text" class="input-large" id="username" placeholder="Optional to save user name">
+					<input type="text" class="input-block-level" id="username" placeholder="Optional to save user name">
 				</div>
 			</div>
 
 			<div class="control-group">
 				<label class="control-label" for="num_symbol">Symbols</label>
 				<div class="controls">
-					<select id="num_symbol">
+					<select class="input-block-level" id="num_symbol">
 						<option>0</option>
 						<option>1</option>
 						<option>2</option>
@@ -101,7 +101,7 @@
 			<div class="control-group">
 				<label class="control-label" for="length">Length</label>
 				<div class="controls">
-					<select id="length">
+					<select class="input-block-level" id="length">
 						<option>8</option>
 						<option>9</option>
 						<option>10</option>
@@ -110,7 +110,7 @@
 						<option>13</option>
 						<option>14</option>
 						<option>15</option>
-						<option>16</option>
+						<option selected="selected">16</option>
 						<option>17</option>
 						<option>18</option>
 						<option>19</option>
@@ -122,7 +122,7 @@
 			<div class="control-group">
 				<label class="control-label" for="generation">Generation</label>
 				<div class="controls">
-					<select id="generation">
+					<select class="input-block-level" id="generation">
 						<option>1</option>
 						<option>2</option>
 						<option>3</option>
@@ -150,7 +150,7 @@
 			<div class="control-group">
 				<label class="control-label" for="hashes">Hashes</label>
 				<div class="controls">
-					<select id="hashes">
+					<select class="input-block-level" id="hashes">
 						<option value="1">2^1</option>
 						<option value="2">2^2</option>
 						<option value="3">2^3</option>

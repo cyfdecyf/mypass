@@ -2,10 +2,10 @@
 <html manifest="mypass.manifest">
 <head>
 	<title>MyPass</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, user-scalable=no">
 	<!-- only works if added the page to home screen on iOS  -->
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="icons/touch-icon-iphone-retina.png" />
 	<!-- css -->
 	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -30,25 +30,25 @@
 		<h1 class="page-header">MyPass</h1>
 
 		<label class="control-label" for="salt">Salt</label>
-		<input type="text" id="salt" placeholder="Your email or anything you like">
+		<input type="text" class="input-block-level" id="salt" placeholder="Your email or anything you like">
 
 		<label class="control-label" for="passphrase">Passphrase</label>
-		<input type="password" id="passphrase" placeholder="Your Secret">
+		<input type="password" class="input-block-level" id="passphrase" placeholder="Your Secret">
 
 		<label class="control-label" for="site">Site</label>
-		<input type="text" id="site" placeholder="example.com">
+		<input type="text" class="input-block-level" id="site" placeholder="example.com">
 
-		<p> <button class="btn" id="genbtn" type="button">Generate</button> </p>
+		<button type="button" class="btn btn-large btn-block" id="genbtn">Generate</button>
 
 		<label class="control-label" for="passwd">Password</label>
-		<input type="text" id="passwd" placeholder="Long press to select" readonly>
+		<input type="text" class="input-block-level" id="passwd" placeholder="Long press to select" readonly>
 
 		<div id="info" class="text-info"></div>
 
 		<hr />
 
 		<label class="control-label" for="num_symbol">Symbols</label>
-		<select id="num_symbol">
+		<select class="input-block-level" id="num_symbol">
 			<option>0</option>
 			<option>1</option>
 			<option>2</option>
@@ -56,7 +56,7 @@
 		</select>
 
 		<label class="control-label" for="length">Length</label>
-		<select id="length">
+		<select class="input-block-level" id="length">
 			<option>8</option>
 			<option>9</option>
 			<option>10</option>
@@ -73,7 +73,7 @@
 		</select>
 
 		<label class="control-label" for="generation">Generation</label>
-		<select id="generation">
+		<select class="input-block-level" id="generation">
 			<option>1</option>
 			<option>2</option>
 			<option>3</option>
@@ -97,7 +97,7 @@
 		</select>
 
 		<label class="control-label" for="hashes">Hashes</label>
-		<select id="hashes">
+		<select class="input-block-level" id="hashes">
 			<option value="1">2^1</option>
 			<option value="2">2^2</option>
 			<option value="3">2^3</option>
@@ -115,6 +115,8 @@
 			<option value="15">2^15</option>
 			<option value="16">2^16</option>
 		</select>
+
+		<p class="muted credit">Created by <a href="http://chenyufei.info">Chen Yufei</a></p>
 	</div>
 </body>
 </html>
