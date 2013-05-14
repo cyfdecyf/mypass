@@ -98,9 +98,11 @@ local_storage_get = (key, cb) ->
 exports.storage = {}
 
 if is_chromeext()
+	console.log 'setting storage to chrome.storage.sync'
 	exports.storage.set = chrome_storage_set
 	exports.storage.get = chrome_storage_get
 else
+	console.log 'setting storage to localStorage'
 	exports.storage.set = local_storage_set
 	exports.storage.get = local_storage_get
 

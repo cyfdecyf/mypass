@@ -52,7 +52,7 @@ exports.load_default_options = load_default_options = ->
 			opt = JSON.parse json
 		update_passwd_options opt
 		console.log "default options #{JSON.stringify(opt)}"
-		load_site_options() if $('#site').val()?
+		load_site_options set_tabindex if $('#site').val()?
 
 # Whether the site's password options has ever been saved.
 site_option_saved = false
@@ -63,11 +63,11 @@ save_site_options = (show_note = true)->
 	site_option_saved = true
 	return
 
-load_site_options = ->
-	# make sure set_tabindex is called before return
+load_site_options = (cb = null) ->
+	# make sure callback is called before return
 	site = $('#site').val()
 	if site == ''
-		set_tabindex()
+		cb() if cb?
 		return
 	console.log "loading options for #{site}"
 	util.storage.get site, (json) ->
@@ -76,8 +76,8 @@ load_site_options = ->
 			opt = JSON.parse(json)
 			console.log "loaded options for #{site}: #{json}"
 			update_passwd_options opt
-			util.notify "Password option for <b>#{site}</b> loaded.", util.NOTIFY_KEEP
-		set_tabindex()
+			util.notify "Option for <b>#{site}</b> loaded.", util.NOTIFY_KEEP
+		cb() if cb?
 
 ##################################################
 # Event handlers
@@ -96,7 +96,7 @@ exports.gen_passwd = gen_passwd = (show_note = true) ->
 	# If this site has never been saved, save it's options now.
 	# This allows user to change default password options
 	# without forgeting options for already used sites.
-	if util.is_chromeext() && !site_option_saved
+	unless site_option_saved || standalone?
 		save_site_options util.NO_NOTE
 		msg += "Options also saved."
 	util.notify msg if show_note
@@ -116,22 +116,34 @@ delay_call = (cb) ->
 	return
 
 exports.site_update = ->
+	# set saved to false fist, loading site options will set saved to true
 	site_option_saved = false
-	delay_call gen_passwd
+	delay_call ->
+		# first load site option, generate password after load is done
+		load_site_options gen_passwd
+
+# On iOS, only load options, do not generate password automatically to avoid
+# wasting power.
+exports.ios_site_update = ->
+	site_option_saved = false
+	delay_call load_site_options
 
 exports.delay_gen_passwd = delay_gen_passwd = ->
 	delay_call gen_passwd
 	return
 
 exports.salt_update = ->
-	localStorage.salt = $('#salt').val()
+	# do not save anything for standalone page
+	localStorage.salt = $('#salt').val() unless standalone?
 	delay_gen_passwd()
 	return
 
+exports.ios_salt_update = ->
+	localStorage.salt = $('#salt').val()
+
 exports.username_update = ->
-	return if $('#site').val() == ''
-	if util.is_chromeext()
-		delay_call save_site_options
+	return if $('#site').val() == '' || standalone?
+	delay_call save_site_options
 	return
 
 exports.passwd_option_update = ->
@@ -139,7 +151,7 @@ exports.passwd_option_update = ->
 	return if site == ''
 	passwd_generated = gen_passwd util.NO_NOTE
 	msg = "Password for <b>#{site}</b> generated. <br />" if passwd_generated
-	if util.is_chromeext()
+	unless standalone?
 		console.log "save password option for #{site}"
 		save_site_options util.NO_NOTE
 		if passwd_generated
@@ -209,7 +221,7 @@ exports.init = init = ->
 		console.log 'in chromeext'
 		load_default_options()
 	else
-		# load_site_options will set tab index
+		# load_default_site_options will set tab index
 		# this is awkward too because set_tabindex should be called after site options is updated
 		set_tabindex()
 	return

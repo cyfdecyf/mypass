@@ -58,8 +58,6 @@
 				</div>
 			</div>
 
-			<hr />
-
 			<div class="control-group">
 				<label class="control-label" for="site">Site</label>
 				<div class="controls">
@@ -162,19 +160,22 @@
 			</div>
 		</form>
 
-		<div class="muted credit" id="credit">
-			<p>This simple web page generates strong, site specific passwords from given passphrase.</p>
+		<div id="info" class="text-center text-info"></div>
 
-			<p>There's also an iOS optimized <a href="ios.html">version</a> and Chrome
-				<a href="https://chrome.google.com/webstore/detail/pbaehcadchmngjeahmifjonliaaidgdj">extension</a>.</p>
+		<div class="muted credit" id="credit">
+			<p>This simple web page generates strong, site specific passwords from given passphrase.
+				Nothing will be saved either on the server or in the browser.</p>
+
+			<p>There's also an iOS optimized <a href="ios.html">version</a> and a Chrome
+				<a href="https://chrome.google.com/webstore/detail/pbaehcadchmngjeahmifjonliaaidgdj"
+				target="_blank">extension</a>. These are designed for ease of use, and will store
+				site options in localStorage and Chrome synced storage.</p>
 
 			<p>The password generation algorithm is the same as
 				<a href="https://oneshallpass.com">One Shall Pass</a>. Visit project
 				page on <a href="https://github.com/cyfdecyf/mypass">github</a>
 				for more technical information.</p>
 		</div>
-
-		<div id="info" class="text-center text-info"></div>
 	</div>
 </body>
 </html>
