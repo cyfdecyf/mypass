@@ -151,6 +151,39 @@ exports.passwd_onclick = ->
 	$(this).select()
 	return
 
+passphrase_plain_text = false
+
+toggle_passphrase = ->
+	console.log 'toggle_passphrase'
+	pp = $('#passphrase')
+	val = pp.val()
+	tabindex = pp.prop 'tabindex'
+	return if val == ''
+
+	common = "class='input-block-level' " +
+		"id='passphrase' placeholder='Press ENTER to toggle plain text' " +
+		"value='#{val}' "
+	common += "tabindex='#{tabindex}'"
+	newpp =
+		if passphrase_plain_text
+			$("<input type='password' #{common}>")
+		else
+			$("<input type='text' #{common}>")
+
+	# bind event handler
+	newpp.on 'keypress', passphrase_keypress
+	newpp.on 'input', delay_gen_passwd
+	# do not auto select upon focus, also put cursor at the end
+	newpp.on 'focus', -> @selectionStart = @selectionEnd = newpp.val().length
+	pp.replaceWith newpp
+	newpp.focus()
+
+	passphrase_plain_text = !passphrase_plain_text
+
+exports.passphrase_keypress = passphrase_keypress = (k) ->
+	# console.log "passphrase key press #{k.which}"
+	toggle_passphrase() if k.which == 13
+
 ##################################################
 # Initialization
 ##################################################

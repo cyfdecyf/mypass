@@ -23,6 +23,7 @@ init = ->
 	$('#site').on 'input', ui.site_update
 	$('#salt').on 'input', ui.salt_update
 	$('#passphrase').on 'input', ui.delay_gen_passwd
+	$('#passphrase').on 'keypress', ui.passphrase_keypress
 	$('#passwd').on 'click', ui.passwd_onclick
 	# following are password options
 	$('#username').on 'input', ui.username_update
