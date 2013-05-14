@@ -5,11 +5,10 @@ all: bundle
 
 bundle:
 	cake build
-	$(BROWSERIFY) js/popup.js -o Chrome/js/popup-bundle.js
-	$(BROWSERIFY) js/options.js -o Chrome/js/options-bundle.js
-	$(BROWSERIFY) js/standalone.js -o js/standalone-bundle.js
-	$(BROWSERIFY) js/ios.js -o js/ios-bundle.js
+	$(BROWSERIFY) build/popup.js -o Chrome/js/popup-bundle.js
+	$(BROWSERIFY) build/options.js -o Chrome/js/options-bundle.js
+	$(BROWSERIFY) build/standalone.js -o html/js/standalone-bundle.js
+	$(BROWSERIFY) build/ios.js -o html/js/ios-bundle.js
 
-# Build a zip ball and transfer it to GoodReader on iPhone
-mypass-ios.zip: ios.html css js/ios-bundle.js js/ui.js js/lib js/cryptojs
-	zip $@ -r $^
+clean:
+	rm -rf build

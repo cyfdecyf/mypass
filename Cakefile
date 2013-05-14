@@ -7,7 +7,7 @@ build = () ->
     coffeeCmd = 'coffee.cmd'
   else
     coffeeCmd = 'coffee'
-  coffee = spawn coffeeCmd, ['-c', '-o', 'js', 'src']
+  coffee = spawn coffeeCmd, ['-c', '-o', 'build', 'src']
   coffee.stderr.on 'data', (data) ->
     process.stderr.write data.toString()
   coffee.stdout.on 'data', (data) ->
@@ -17,7 +17,7 @@ build = () ->
       process.exit code
 
 watch = () ->
-    coffee = spawn 'coffee', ['-w', '-c', '-o', 'js', 'src']
+    coffee = spawn 'coffee', ['-w', '-c', '-o', 'build', 'src']
     coffee.stderr.on 'data', (data) ->
       process.stderr.write data.toString()
     coffee.stdout.on 'data', (data) ->
