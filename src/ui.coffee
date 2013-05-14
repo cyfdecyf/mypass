@@ -39,13 +39,13 @@ save_options = (site, msg, show_note = true) ->
 		opt.uname = username
 	obj = {}
 	obj[site] = JSON.stringify opt
-	util.storage.sync.set obj, msg, show_note
+	util.storage.set obj, msg, show_note
 
 exports.save_default_options = ->
 	save_options config.options_key, 'Password options'
 
 exports.load_default_options = load_default_options = ->
-	util.storage.sync.get config.options_key, (json) ->
+	util.storage.get config.options_key, (json) ->
 		opt = config.options.default
 		if json?
 			console.log 'default options loaded'
@@ -70,7 +70,7 @@ load_site_options = ->
 		set_tabindex()
 		return
 	console.log "loading options for #{site}"
-	util.storage.sync.get site, (json) ->
+	util.storage.get site, (json) ->
 		if json?
 			site_option_saved = true
 			opt = JSON.parse(json)
@@ -140,6 +140,7 @@ exports.passwd_option_update = ->
 	passwd_generated = gen_passwd util.NO_NOTE
 	msg = "Password for <b>#{site}</b> generated. <br />" if passwd_generated
 	if util.is_chromeext()
+		console.log "save password option for #{site}"
 		save_site_options util.NO_NOTE
 		if passwd_generated
 			msg += "Options also saved."
@@ -202,6 +203,7 @@ set_tabindex = ->
 	return
 
 exports.init = init = ->
+	console.log 'ui init'
 	$('#salt').val localStorage.salt if localStorage.salt?
 	if util.is_chromeext()
 		console.log 'in chromeext'

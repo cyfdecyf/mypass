@@ -52,11 +52,7 @@ chromeext = null
 # make this global
 exports.is_chromeext = is_chromeext = ->
 	if chromeext == null
-		c = $('#chromeext')
-		if c?
-			chromeext = c.length != 0
-		else
-			chromeext = false
+		chromeext = $('#chromeext').length != 0
 	chromeext
 
 #################################################
@@ -66,8 +62,8 @@ exports.is_chromeext = is_chromeext = ->
 exports.SHOW_NOTE = true
 exports.NO_NOTE = false
 
-chrome_storage_set = (storage, obj, msg, show_note)->
-	storage.set(
+chrome_storage_set = (obj, msg, show_note = true) ->
+	chrome.storage.sync.set(
 		obj,
 		->
 			if chrome.runtime.lastError?
@@ -78,8 +74,8 @@ chrome_storage_set = (storage, obj, msg, show_note)->
 	return
 
 # assumes the key is a single string
-chrome_storage_get = (storage, key, cb) ->
-	storage.get(
+chrome_storage_get = (key, cb) ->
+	chrome.storage.sync.get(
 		key,
 		(items) ->
 			if items? && items[key]?
@@ -90,21 +86,27 @@ chrome_storage_get = (storage, key, cb) ->
 	)
 	return
 
-exports.storage =
-	local:
-		get: (key, cb) ->
-			chrome_storage_get chrome.storage.local, key, cb
-			return
-		set: (obj, msg, show_note = true) ->
-			chrome_storage_set chrome.storage.local, obj, msg, show_note
-			return
-	sync:
-		get: (key, cb) ->
-			chrome_storage_get chrome.storage.sync, key, cb
-			return
-		set: (obj, msg, show_note = true) ->
-			chrome_storage_set chrome.storage.sync, obj, msg, show_note
-			return
+local_storage_set = (obj, msg, show_note = true) ->
+	for key, value of obj
+		localStorage[key] = value
+	if msg != '' && show_note
+		notify "#{msg} saved."
+
+local_storage_get = (key, cb) ->
+	item = localStorage[key]
+	if item?
+		cb item
+	else
+		cb null
+
+exports.storage = {}
+
+if is_chromeext()
+	exports.storage.set = chrome_storage_set
+	exports.storage.get = chrome_storage_get
+else
+	exports.storage.set = local_storage_set
+	exports.storage.get = local_storage_get
 
 #################################################
 # Notification
