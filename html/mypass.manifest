@@ -5,7 +5,6 @@ CACHE MANIFEST
 CACHE:
 ios.html
 css/bootstrap.min.css
-css/bootstrap-responsive.min.css
 js/jquery.js
 js/cryptojs/components/core-min.js
 js/cryptojs/components/enc-base64-min.js
