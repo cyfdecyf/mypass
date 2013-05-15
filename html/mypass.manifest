@@ -9,6 +9,5 @@ css/bootstrap-responsive.min.css
 js/jquery.js
 js/cryptojs/components/core-min.js
 js/cryptojs/components/enc-base64-min.js
-js/cryptojs/rollups/sha512.js
 js/cryptojs/rollups/hmac-sha512.js
 js/ios-bundle.js
