@@ -37,6 +37,13 @@ exports.PasswdGenerator = class PasswdGenerator
 			@itercnt = itercnt
 		return @web_pw_key
 
+	# The folloing algorithm is copied from 1SP, which uses key_mode to
+	# derive different keys from the same passphrase.
+	# The call to run_key_derivation with key_mode 1 has the same effect
+	# as calling PBKDF2 from CryptoJS like the following:
+	#   C.PBKDF2 passphrase, salt, { keySize: 512/32, iterations: itercnt, hasher: C.algo.SHA512 }
+	# Only key_mode WEB_PW is used in mypass, I still use this function
+	# to avoid including pbkdf2.js
 	run_key_derivation: (salt, passphrase, itercnt, key_mode) ->
 		# The initial setup as per PBKDF2, with salt as the salt
 		hmac = C.algo.HMAC.create C.algo.SHA512, passphrase

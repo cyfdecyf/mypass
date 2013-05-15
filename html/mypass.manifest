@@ -1,6 +1,6 @@
 CACHE MANIFEST
 
-# Version: 1.0
+# Version: 1.0.1
 
 CACHE:
 ios.html
@@ -11,5 +11,4 @@ js/cryptojs/components/core-min.js
 js/cryptojs/components/enc-base64-min.js
 js/cryptojs/rollups/sha512.js
 js/cryptojs/rollups/hmac-sha512.js
-js/cryptojs/rollups/pbkdf2.js
 js/ios-bundle.js
