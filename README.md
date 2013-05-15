@@ -1,6 +1,13 @@
-**MyPass** is a Chrome extension to *generate different passwords for different sites with **a single passphrase***. It uses the same algorithm as [One Shall Pass](https://oneshallpass.com/) (1SP) to generate password.
+**MyPass** is a tool to *generate different passwords for different sites with **a single passphrase***. It uses the same algorithm as [One Shall Pass](https://oneshallpass.com/) (1SP) to generate password. You can specify options like length, number of symbols to use.
 
-Install from [Chrome Web Store](https://chrome.google.com/webstore/detail/pbaehcadchmngjeahmifjonliaaidgdj).
+MyPass is implemented as:
+
+- [Chrome extension](https://chrome.google.com/webstore/detail/pbaehcadchmngjeahmifjonliaaidgdj)
+  - This is the easiest way to use MyPass
+- [Standalone web page](http://chenyufei.info/p/mypass/)
+  - Use this when you don't have access to your own Chrome
+- [iOS optimized web page](http://chenyufei.info/p/mypass/ios.html)
+  - Add this to home screen so you can use it (even when offline) on your iOS device
 
 # Technical information
 
@@ -30,7 +37,9 @@ password for each site. For the detailed algorithm and how secure it is, please 
 
 ## How are site options stored?
 
-Site options are stored in Chrome extension storage. `chrome.storage.sync` is used so these options will be automatically synchronized.
+- Chrome extension: stored in `chrome.storage.sync`, will be synchronized by Chrome
+- Standalone web page: **NOT** saved
+- iOS web page: stored in local storage
 
 Site options are **NOT encrypted** and please let me explain why.
 
