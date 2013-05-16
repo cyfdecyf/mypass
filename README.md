@@ -41,17 +41,17 @@ password for each site. For the detailed algorithm and how secure it is, please 
 - Standalone web page: **NOT** saved
 - iOS web page: stored in local storage
 
-Site options are **NOT encrypted** and please let me explain why.
+MyPass itself does **NOT encrypt** site options when storing to either `chrome.sync.storage` or local storage and please let me explain why in a moment. For Chrome extension users, I *recommend* setting Chrome to encrypt all synced data and thus have your site options encrypted. (You need to manually set this in "Advanced sync options" in Chrome and use a *separate* passphrase.)
 
-If someone got your site options data either by breaking into your computer or Google's cloud storage,
+If someone get your site options data either by breaking into your computer or Google's cloud storage,
 
 - If it's **NOT encrypted**, then he knows your password options which seems bad. But **this information provides little help if he wants to use brute force to guess your password** for *every* different site, and it **provides no help in guessing you passphrase**.
   - Of course, a long enough password (say more than 12 chars) is required to ensure safety
   - He can use brute force to guess passwords even if he has no options data
   - User name is usually your identity, it's not a secret in most cases
-- If it's **encrypted using some key generated from your passphrase**, because he now gets the encrypted data, **he can brute force to guess your passphrase by trying to decrypt the data**. (Though this would be expensive, but it's possible.) Once he succeeds to know the passphrase, you are in bad luck.
+- If it's **encrypted using some key generated from your passphrase**, because he now gets the encrypted data, **he can brute force to guess your passphrase by trying to decrypt the data**. (Though this would be expensive, it's possible.) Once he succeeds to know the passphrase, you are in bad luck.
 
-So encrypting site options based on passphrase generated keys actually has more serious security risk, that's why I choose not to encrypt site options.
+So encrypting site options by passphrase generated keys actually has more serious security risk, that's why I choose not to encrypt site options.
 
 # Build
 
