@@ -62,6 +62,24 @@ You need [Node.js](http://nodejs.org/) installed and file systems that supports 
     # Compile CoffeeScript source and create bundle with browserify
     make
 
+## Customize Bootstrap
+
+To reduce the amount of CSS/JavaScript to be included, I [customized bootstrap](http://twitter.github.io/bootstrap/customize.html) with only the following items selected:
+
+- Components
+  - Scaffolding
+    - Body type and links
+    - Layouts
+  - Base CSS
+    - Headings, body, etc
+    - Tables
+    - Forms
+    - Buttons
+  - JS Components
+    - Dropdowns
+
+I also removed invalid input CSS so they don't look abrupt on iOS.
+
 # Credits
 
 The password generation code is mostly copied from 1SP.
