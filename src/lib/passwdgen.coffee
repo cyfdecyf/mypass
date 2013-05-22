@@ -1,4 +1,7 @@
 {config} = require './config'
+# It's possible to use pure js implementation of msgpack.
+# Include https://raw.github.com/msgpack/msgpack-javascript/master/msgpack.js
+# in html, change pack_to_word_array (see comments there).
 purepack = require 'purepack'
 C = if CryptoJS? then CryptoJS else null
 
@@ -146,9 +149,10 @@ exports.PasswdGenerator = class PasswdGenerator
 	is_valid: (c) -> @is_upper(c) or @is_lower(c) or @is_digit (c)
 
 # copied from packed.iced in 1SP
-# replace purepack with msgpack
 pack_to_word_array = (obj) ->
 	ui8a = purepack.pack(obj, 'ui8a')
+	# use following code to use msgpack.
+	# ui8a = msgpack.pack(obj)
 	i32a = Ui8a.to_i32a ui8a
 	v = (w for w in i32a)
 	C.lib.WordArray.create v, ui8a.length
