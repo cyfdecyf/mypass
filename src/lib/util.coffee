@@ -44,14 +44,6 @@ exports.parse_site = parse_site = (url) ->
 	host2domain(parse_hostname url)
 
 #################################################
-# Extension detection
-#################################################
-
-# make this global
-exports.is_chromeext = is_chromeext = ->
-	chrome? && chrome.storage?
-
-#################################################
 # Storage
 #################################################
 
@@ -97,7 +89,7 @@ local_storage_get = (key, cb) ->
 
 exports.storage = {}
 
-if is_chromeext()
+if is_chromeext?
 	console.log 'setting storage to chrome.storage.sync'
 	exports.storage.set = chrome_storage_set
 	exports.storage.get = chrome_storage_get

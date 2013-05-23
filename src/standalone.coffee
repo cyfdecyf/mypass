@@ -1,8 +1,8 @@
-ui = require './ui'
-
 # Standalone page will not save password options, because it's designed for
 # use when user can't access their own device.
-window.standalone = true
+window.is_standalone = true
+
+ui = require './ui'
 
 $ ->
 	ui.init()

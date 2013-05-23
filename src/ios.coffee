@@ -1,3 +1,5 @@
+window.is_ios = true
+
 ui = require './ui'
 
 $(document).ready ->

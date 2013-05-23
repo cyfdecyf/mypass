@@ -96,7 +96,7 @@ exports.gen_passwd = gen_passwd = (show_note = true) ->
 	# If this site has never been saved, save it's options now.
 	# This allows user to change default password options
 	# without forgeting options for already used sites.
-	unless site_option_saved || standalone?
+	unless site_option_saved || is_standalone?
 		save_site_options util.NO_NOTE
 		msg += "Options also saved."
 	util.notify msg if show_note
@@ -134,7 +134,7 @@ exports.delay_gen_passwd = delay_gen_passwd = ->
 
 exports.salt_update = ->
 	# do not save anything for standalone page
-	localStorage.salt = $('#salt').val() unless standalone?
+	util.storage.set_salt $('#salt').val() unless is_standalone?
 	delay_gen_passwd()
 	return
 
@@ -142,7 +142,7 @@ exports.ios_salt_update = ->
 	localStorage.salt = $('#salt').val()
 
 exports.username_update = ->
-	return if $('#site').val() == '' || standalone?
+	return if $('#site').val() == '' || is_standalone?
 	delay_call save_site_options
 	return
 
@@ -151,7 +151,7 @@ exports.passwd_option_update = ->
 	return if site == ''
 	passwd_generated = gen_passwd util.NO_NOTE
 	msg = "Password for <b>#{site}</b> generated. <br />" if passwd_generated
-	unless standalone?
+	unless is_standalone?
 		console.log "save password option for #{site}"
 		save_site_options util.NO_NOTE
 		if passwd_generated

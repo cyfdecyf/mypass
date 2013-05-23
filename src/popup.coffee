@@ -1,3 +1,5 @@
+window.is_chromeext = true
+
 util = require './lib/util'
 ui = require './ui'
 
