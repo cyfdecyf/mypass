@@ -124,7 +124,6 @@ exports.gen_passwd = gen_passwd = (show_note = true) ->
 			opt_msg += "Options also saved."
 
 	if not_enough_input()
-		$('#passwd').val ''
 		util.notify "Options for <b>#{site}</b> saved." if options_saved
 		return false
 
@@ -151,6 +150,8 @@ delay_call = (cb) ->
 	return
 
 exports.site_update = site_update = ->
+	# update lastInputTime here, so the delayed gen_passwd will not trigger
+	lastInputTime = new Date().getTime()
 	site_option_state = OPTION_STATE.CHANGED
 
 exports.site_keypress = (k) ->
@@ -169,6 +170,7 @@ exports.salt_update = ->
 	return
 
 exports.ios_salt_update = ->
+	lastInputTime = new Date().getTime()
 	util.storage.set_salt $('#salt').val()
 
 exports.username_update = ->
@@ -231,8 +233,7 @@ set_site_typeahead = ->
 			updater: (item) ->
 				console.log "#{item} selected"
 				site_update()
-				delay_call ->
-					load_site_options gen_passwd
+				load_site_options gen_passwd
 				item
 		}
 		return
