@@ -32,6 +32,7 @@ exports.update_passwd_options = update_passwd_options = (opt) ->
 	return
 
 save_options = (site, msg, show_note = true) ->
+	return if site == ''
 	opt =
 		nsym: $('#num_symbol').val()
 		len: $('#length').val()
@@ -106,28 +107,34 @@ load_site_options = (cb = null) ->
 not_enough_input = ->
 	$('#site').val()  == '' || $('#salt').val() == '' || $('#passphrase').val() == ''
 
+# Save site options and generate password.
 exports.gen_passwd = gen_passwd = (show_note = true) ->
+	site = $('#site').val()
+
+	opt_msg = ''
+	options_saved = false
+	# make sure we save password options even if password is not generated
+	unless is_standalone? || site == ''
+		if site_option_state == OPTION_STATE.LOADED
+			opt_msg = "Using loaded options."
+		else if site_option_state == OPTION_STATE.NOT_FOUND ||
+				site_option_state == OPTION_STATE.CHANGED
+			save_site_options util.NO_NOTE
+			options_saved = true
+			opt_msg += "Options also saved."
+
 	if not_enough_input()
 		$('#passwd').val ''
+		util.notify "Options for <b>#{site}</b> saved." if options_saved
 		return false
+
 	input = gather_input()
 	p = passwdgen.generate input
 	$('#passwd').val p
 
-	msg = "Password for <b>#{$('#site').val()}</b> generated. <br />"
-	if is_standalone?
-		util.notify msg if show_note
-		return
-	# If this site has never been saved, save it's options now.
-	# This allows user to change default password options
-	# without forgeting options for already used sites.
-	if site_option_state == OPTION_STATE.LOADED
-		msg += "Using loaded options."
-	else if site_option_state == OPTION_STATE.NOT_FOUND ||
-			site_option_state == OPTION_STATE.CHANGED
-		save_site_options util.NO_NOTE
-		msg += "Options also saved."
-	util.notify msg if show_note
+	msg = "Password for <b>#{site}</b> generated. <br />"
+
+	util.notify "#{msg} #{opt_msg}"  if show_note
 	return true
 
 lastInputTime = new Date(1970, 1, 1)
@@ -172,16 +179,8 @@ exports.username_update = ->
 exports.passwd_option_update = ->
 	site = $('#site').val()
 	return if site == ''
-	passwd_generated = gen_passwd util.NO_NOTE
-	msg = "Password for <b>#{site}</b> generated. <br />" if passwd_generated
-	unless is_standalone?
-		console.log "save password option for #{site}"
-		save_site_options util.NO_NOTE
-		if passwd_generated
-			msg += "Options also saved."
-		else
-			msg = "Options for <b>#{site}</b> saved."
-	util.notify msg if msg != ''
+	site_option_state = OPTION_STATE.CHANGED
+	gen_passwd()
 
 exports.passwd_onclick = ->
 	$(this).select()
