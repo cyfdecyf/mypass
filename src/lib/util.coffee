@@ -1,3 +1,5 @@
+{config} = require './config'
+
 host_is_ip = (host) ->
 	parts = host.split '.'
 	if parts.length != 4
@@ -87,7 +89,11 @@ local_storage_get = (key, cb) ->
 	else
 		cb null
 
-exports.storage = {}
+exports.storage =
+	get_salt: ->
+		localStorage[config.salt_key]
+	set_salt: (salt) ->
+		localStorage[config.salt_key] = salt
 
 if is_chromeext?
 	console.log 'setting storage to chrome.storage.sync'

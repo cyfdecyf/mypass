@@ -1,5 +1,6 @@
 exports.config =
 	options_key: '##mypass_options##'
+	salt_key: '##salt##'
 	options:
 		default:
 			nsym: 0

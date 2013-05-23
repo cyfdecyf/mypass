@@ -139,7 +139,7 @@ exports.salt_update = ->
 	return
 
 exports.ios_salt_update = ->
-	localStorage.salt = $('#salt').val()
+	util.storage.set_salt $('#salt').val()
 
 exports.username_update = ->
 	return if $('#site').val() == '' || is_standalone?
@@ -216,8 +216,16 @@ set_tabindex = ->
 
 exports.init = init = ->
 	console.log 'ui init'
-	$('#salt').val localStorage.salt if localStorage.salt?
-	if util.is_chromeext()
+
+	# TODO the following code are for changing salt key without disturbing current user
+	# remove the following 3 lines of code in the next version
+	if localStorage.salt?
+		util.storage.set_salt localStorage.salt
+		delete localStorage.salt
+
+	stored_salt = util.storage.get_salt()
+	$('#salt').val stored_salt if stored_salt?
+	if is_chromeext?
 		console.log 'in chromeext'
 		load_default_options()
 	else
