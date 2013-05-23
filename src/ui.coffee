@@ -21,7 +21,10 @@ gather_input = ->
 
 # update password options on page
 exports.update_passwd_options = update_passwd_options = (opt) ->
-	$('#username').val opt.uname if opt.uname?
+	if opt.uname?
+		$('#username').val opt.uname
+	else
+		$('#username').val ''
 	$('#num_symbol').val opt.nsym if opt.nsym?
 	$('#length').val opt.len if opt.len?
 	$('#generation').val opt.gen if opt.gen?
@@ -54,49 +57,74 @@ exports.load_default_options = load_default_options = ->
 		console.log "default options #{JSON.stringify(opt)}"
 		load_site_options set_tabindex if $('#site').val()?
 
-# Whether the site's password options has ever been saved.
-site_option_saved = false
+# Ugly hack. For gen_passwd to know whether options are loaded, saved, etc.
+OPTION_STATE =
+	NOT_FOUND: 1
+	LOADED: 2
+	SAVED: 3
+	CHANGED: 4
+
+site_option_state = OPTION_STATE.NOT_FOUND
 
 save_site_options = (show_note = true)->
 	site = $('#site').val()
 	save_options site, "Options for <b>#{site}</b>", show_note
-	site_option_saved = true
+	site_option_state = OPTION_STATE.SAVED
 	return
 
 load_site_options = (cb = null) ->
 	# make sure callback is called before return
+	if is_standalone?
+		cb() if cb?
+		return
 	site = $('#site').val()
 	if site == ''
+		cb() if cb?
+		return
+	if site_option_state == OPTION_STATE.LOADED ||
+			site_option_state == OPTION_STATE.SAVED
+		# no need to load
 		cb() if cb?
 		return
 	console.log "loading options for #{site}"
 	util.storage.get site, (json) ->
 		if json?
-			site_option_saved = true
+			site_option_state = OPTION_STATE.LOADED
 			opt = JSON.parse(json)
 			console.log "loaded options for #{site}: #{json}"
 			update_passwd_options opt
-			util.notify "Option for <b>#{site}</b> loaded.", util.NOTIFY_KEEP
+			if not_enough_input()
+				util.notify "Option for <b>#{site}</b> loaded.", util.NOTIFY_KEEP
+		else
+			site_option_state = OPTION_STATE.NOT_FOUND
 		cb() if cb?
 
 ##################################################
 # Event handlers
 ##################################################
 
+not_enough_input = ->
+	$('#site').val()  == '' || $('#salt').val() == '' || $('#passphrase').val() == ''
+
 exports.gen_passwd = gen_passwd = (show_note = true) ->
-	site = $('#site').val()
-	if site  == '' || $('#salt').val() == '' || $('#passphrase').val() == ''
+	if not_enough_input()
 		$('#passwd').val ''
 		return false
 	input = gather_input()
 	p = passwdgen.generate input
 	$('#passwd').val p
 
-	msg = "Password for <b>#{site}</b> generated. <br />"
+	msg = "Password for <b>#{$('#site').val()}</b> generated. <br />"
+	if is_standalone?
+		util.notify msg if show_note
+		return
 	# If this site has never been saved, save it's options now.
 	# This allows user to change default password options
 	# without forgeting options for already used sites.
-	unless site_option_saved || is_standalone?
+	if site_option_state == OPTION_STATE.LOADED
+		msg += "Using loaded options."
+	else if site_option_state == OPTION_STATE.NOT_FOUND ||
+			site_option_state == OPTION_STATE.CHANGED
 		save_site_options util.NO_NOTE
 		msg += "Options also saved."
 	util.notify msg if show_note
@@ -115,18 +143,13 @@ delay_call = (cb) ->
 		, delayTime)
 	return
 
-exports.site_update = ->
-	# set saved to false fist, loading site options will set saved to true
-	site_option_saved = false
-	delay_call ->
-		# first load site option, generate password after load is done
-		load_site_options gen_passwd
+exports.site_update = site_update = ->
+	site_option_state = OPTION_STATE.CHANGED
 
-# On iOS, only load options, do not generate password automatically to avoid
-# wasting power.
-exports.ios_site_update = ->
-	site_option_saved = false
-	delay_call load_site_options
+exports.site_keypress = (k) ->
+	if k.which == 13
+		console.log 'site input enter pressed'
+		gen_passwd()
 
 exports.delay_gen_passwd = delay_gen_passwd = ->
 	delay_call gen_passwd
@@ -201,12 +224,26 @@ exports.passphrase_keypress = passphrase_keypress = (k) ->
 # Initialization
 ##################################################
 
+set_site_typeahead = ->
+	util.storage.load_all_sites (sites) ->
+		# console.log "all sites #{sites}"
+		$('#site').typeahead {
+			source: sites
+			updater: (item) ->
+				console.log "#{item} selected"
+				site_update()
+				delay_call ->
+					load_site_options gen_passwd
+				item
+		}
+		return
+
 set_tabindex = ->
 	index = 1
 	set_one_tabindex = (id) ->
 		e = $('#'+id)
 		if e.val() == ''
-			console.log "#{id} tabindex #{index} #{e.val()}"
+			# console.log "#{id} tabindex #{index} #{e.val()}"
 			e.prop 'tabindex', index.toString()
 			e.focus() if index == 1
 			index++
@@ -232,4 +269,5 @@ exports.init = init = ->
 		# load_default_site_options will set tab index
 		# this is awkward too because set_tabindex should be called after site options is updated
 		set_tabindex()
+	set_site_typeahead() unless is_standalone?
 	return

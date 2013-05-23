@@ -23,6 +23,7 @@ init = ->
 		return
 	)
 	$('#site').on 'input', ui.site_update
+	$('#site').on 'keypress', ui.site_keypress
 	$('#salt').on 'input', ui.salt_update
 	$('#passphrase').on 'input', ui.delay_gen_passwd
 	$('#passphrase').on 'keypress', ui.passphrase_keypress
