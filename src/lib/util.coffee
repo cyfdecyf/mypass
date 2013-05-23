@@ -89,6 +89,18 @@ local_storage_get = (key, cb) ->
 	else
 		cb null
 
+# Note salt is stored in local storage, options are stored in Chrome synced storage.
+# Need to filter them out when loading all sites, otherwise will cause JSON parse error.
+
+chrome_storage_load_all_sites = (cb) ->
+	chrome.storage.sync.get null, (items) ->
+		sites = (site for site, _ of items when site != config.options_key)
+		cb sites
+
+local_storage_load_all_sites = (cb) ->
+	sites = (site for site, _ of localStorage when site != config.salt_key)
+	cb sites
+
 exports.storage =
 	get_salt: ->
 		localStorage[config.salt_key]
@@ -99,10 +111,12 @@ if is_chromeext?
 	console.log 'setting storage to chrome.storage.sync'
 	exports.storage.set = chrome_storage_set
 	exports.storage.get = chrome_storage_get
+	exports.storage.load_all_sites = chrome_storage_load_all_sites
 else
 	console.log 'setting storage to localStorage'
 	exports.storage.set = local_storage_set
 	exports.storage.get = local_storage_get
+	exports.storage.load_all_sites = local_storage_load_all_sites
 
 #################################################
 # Notification
