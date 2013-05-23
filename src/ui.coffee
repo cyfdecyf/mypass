@@ -139,14 +139,14 @@ exports.gen_passwd = gen_passwd = (show_note = true) ->
 lastInputTime = new Date(1970, 1, 1)
 delayTime = 500
 
-delay_call = (cb) ->
+delay_call = (cb, delay = delayTime) ->
 	triggerTime = lastInputTime = new Date().getTime()
 	setTimeout(
 		->
 			if triggerTime == lastInputTime
 				cb()
 				return
-		, delayTime)
+		, delay)
 	return
 
 exports.site_update = site_update = ->
@@ -233,7 +233,15 @@ set_site_typeahead = ->
 			updater: (item) ->
 				console.log "#{item} selected"
 				site_update()
-				load_site_options gen_passwd
+
+				# Must use delay_call to
+				# 1. make blur take effect os iOS
+				# 2. make sure gen_passwd get the selected item
+				delay_call ->
+					load_site_options ->
+						$('#site').blur() if is_ios?
+						gen_passwd()
+					, 10
 				item
 		}
 		return
