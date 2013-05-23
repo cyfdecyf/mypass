@@ -1,4 +1,4 @@
-**MyPass** is a tool to *generate different passwords for different sites with **a single passphrase***. It uses the same algorithm as [One Shall Pass](https://oneshallpass.com/) (1SP) to generate password. You can specify options like length, number of symbols to use.
+**MyPass** is a tool to generate *different passwords for different sites* with a given passphrase. It uses the same algorithm with [One Shall Pass](https://oneshallpass.com/) (1SP). You can specify options like password length, number of symbols, etc.
 
 MyPass is implemented as:
 
@@ -68,15 +68,17 @@ To reduce the amount of CSS/JavaScript to be included, I [customized bootstrap](
 
 - Components
   - Scaffolding
-    - Body type and links
-    - Layouts
+      - Body type and links
+      - Layouts
   - Base CSS
-    - Headings, body, etc
-    - Tables
-    - Forms
-    - Buttons
+      - Headings, body, etc
+      - Tables
+      - Forms
+      - Buttons
   - JS Components
-    - Dropdowns
+      - Dropdowns
+- jQuery plugins
+  - Typeahead
 
 I also removed invalid input CSS so they don't look abrupt on iOS.
 
