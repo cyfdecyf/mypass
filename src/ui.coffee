@@ -95,7 +95,7 @@ load_site_options = (cb = null) ->
 			console.log "loaded options for #{site}: #{json}"
 			update_passwd_options opt
 			if not_enough_input()
-				util.notify "Option for <b>#{site}</b> loaded.", util.NOTIFY_KEEP
+				util.notify "Option for <b>#{site}</b> loaded."
 		else
 			site_option_state = OPTION_STATE.NOT_FOUND
 		cb() if cb?
@@ -129,7 +129,13 @@ exports.gen_passwd = gen_passwd = (show_note = true) ->
 
 	input = gather_input()
 	p = passwdgen.generate input
-	$('#passwd').val p
+	if is_ios?
+		passwd = $('#passwd')
+		passwd.html p
+		passwd.removeClass 'muted'
+		passwd.addClass 'text-success'
+	else
+		$('#passwd').val p
 
 	msg = "Password for <b>#{site}</b> generated. <br />"
 
