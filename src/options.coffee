@@ -8,7 +8,7 @@ load_all_site_options = ->
 	chrome.storage.sync.get null, (items) ->
 		for site, optjson of items
 			continue if site == config.options_key
-			console.log "#{site} #{optjson}"
+			# console.log "#{site} #{optjson}"
 			opt = JSON.parse optjson
 			site_opt.append "<tr id='#{site}'>" +
 				"<td>#{site}</td>" +
