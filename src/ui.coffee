@@ -268,12 +268,6 @@ set_tabindex = ->
 exports.init = init = ->
 	console.log 'ui init'
 
-	# TODO the following code are for changing salt key without disturbing current user
-	# remove the following 3 lines of code in the next version
-	if localStorage.salt?
-		util.storage.set_salt localStorage.salt
-		delete localStorage.salt
-
 	stored_salt = util.storage.get_salt()
 	$('#salt').val stored_salt if stored_salt?
 	if is_chromeext?
