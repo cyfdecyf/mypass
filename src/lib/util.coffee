@@ -142,11 +142,8 @@ else
 # Notification
 #################################################
 
-exports.NOTIFY_KEEP = false
-
 exports.notify = notify = (msg, hide = true) ->
 	console.log msg
 	info = $('#info')
 	if info?
-		info.html(msg).show()
-		info.delay(1000).hide(300) if hide
+		info.html msg

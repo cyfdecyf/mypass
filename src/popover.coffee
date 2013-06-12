@@ -8,6 +8,7 @@ clear_input = ->
 	$('#username').val ''
 	$('#site').val ''
 	$('#passwd').val ''
+	$('#info').html '<b>MyPass</b> <br />Generate your password'
 
 # Clear passphrase soon after popover is not showing.
 validateHandler = (event) ->
