@@ -3,56 +3,14 @@
 <plist version="1.0">
 <array>
 	<dict>
-		<key>Title</key>
-		<string>Default password options</string>
-		<key>Type</key>
-		<string>Group</string>
-	</dict>
-	<dict>
 		<key>DefaultValue</key>
-		<real>0.0</real>
+		<false/>
 		<key>Key</key>
-		<string>nsym</string>
-		<key>MaximumValue</key>
-		<real>3</real>
-		<key>Secure</key>
-		<true/>
+		<string>options</string>
 		<key>Title</key>
-		<string>Symbols</string>
+		<string>Click to open settings and manage saved sites</string>
 		<key>Type</key>
-		<string>TextField</string>
-	</dict>
-	<dict>
-		<key>DefaultValue</key>
-		<real>16</real>
-		<key>Key</key>
-		<string>len</string>
-		<key>MaximumValue</key>
-		<real>20</real>
-		<key>MinimumValue</key>
-		<real>8</real>
-		<key>Secure</key>
-		<true/>
-		<key>Title</key>
-		<string>Length</string>
-		<key>Type</key>
-		<string>TextField</string>
-	</dict>
-	<dict>
-		<key>DefaultValue</key>
-		<real>1</real>
-		<key>Key</key>
-		<string>hashes</string>
-		<key>MaximumValue</key>
-		<real>16</real>
-		<key>MinimumValue</key>
-		<real>1</real>
-		<key>Secure</key>
-		<true/>
-		<key>Title</key>
-		<string>Hashes</string>
-		<key>Type</key>
-		<string>TextField</string>
+		<string>CheckBox</string>
 	</dict>
 </array>
 </plist>

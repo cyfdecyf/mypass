@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>MyPass Options</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- css -->
+	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<style type="text/css" media="screen">
+	.container {
+		width: 550px;
+	}
+	.page-header {
+		text-align: center;
+	}
+	.form-horizontal .control-label {
+		float: left;
+		width: 100px;
+		padding-top: 5px;
+		text-align: right;
+	}
+	.form-horizontal .controls {
+		*display: inline-block;
+		*padding-left: 20px;
+		margin-left: 110px;
+		*margin-left: 0;
+	}
+	.invisible {
+		visibility: hidden;
+	}
+    </style>
+	<!-- javascript -->
+	<script src="js/jquery.js"></script>
+	<script src="js/options-bundle.js"></script>
+</head>
+<body>
+	<div id="content" class="container">
+		<h1 class="page-header">
+			MyPass Options
+		</h1>
+
+		<p>For technical information (how to choose a passphrase, how is the password
+		generated, how are site options stored), please visit the project web site on
+		<a href="https://github.com/cyfdecyf/mypass" target="_blank">github</a>.</p>
+
+		<hr />
+
+		<p>Default password options:</p>
+		<form class="form-horizontal">
+			<div class="control-group">
+				<label class="control-label" for="num_symbol">Symbols</label>
+				<div class="controls">
+					<select id="num_symbol">
+						<option>0</option>
+						<option>1</option>
+						<option>2</option>
+						<option>3</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="length">Length</label>
+				<div class="controls">
+					<select id="length">
+						<option>8</option>
+						<option>9</option>
+						<option>10</option>
+						<option>11</option>
+						<option>12</option>
+						<option>13</option>
+						<option>14</option>
+						<option>15</option>
+						<option>16</option>
+						<option>17</option>
+						<option>18</option>
+						<option>19</option>
+						<option>20</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="hashes">Hashes</label>
+				<div class="controls">
+					<select id="hashes">
+						<option value="1">2^1</option>
+						<option value="2">2^2</option>
+						<option value="3">2^3</option>
+						<option value="4">2^4</option>
+						<option value="5">2^5</option>
+						<option value="6">2^6</option>
+						<option value="7">2^7</option>
+						<option value="8">2^8</option>
+						<option value="9">2^9</option>
+						<option value="10">2^10</option>
+						<option value="11">2^11</option>
+						<option value="12">2^12</option>
+						<option value="13">2^13</option>
+						<option value="14">2^14</option>
+						<option value="15">2^15</option>
+						<option value="16">2^16</option>
+					</select>
+				</div>
+			</div>
+		</form>
+
+		<div id="info" class="text-center text-info"></div>
+
+		<hr />
+
+		<p>Manage site options:</p>
+
+		<table class="table table-bordered table-striped table-hover">
+			<thead>
+				<tr>
+					<th>Site</th>
+					<th>User name</th>
+					<th>Sym</th>
+					<th>Len</th>
+					<th>Gen</th>
+					<th>Hash</th>
+					<th><span class="invisible">pad__</span></th>
+				</tr>
+			</thead>
+			<tbody id="site-opt">
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
