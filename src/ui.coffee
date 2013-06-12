@@ -52,7 +52,7 @@ exports.load_default_options = load_default_options = ->
 	util.storage.get config.options_key, (json) ->
 		opt = config.options.default
 		if json?
-			console.log 'default options loaded'
+			# console.log 'default options loaded'
 			opt = JSON.parse json
 		update_passwd_options opt
 		console.log "default options #{JSON.stringify(opt)}"
@@ -162,7 +162,7 @@ exports.site_update = site_update = ->
 
 exports.site_keypress = (k) ->
 	if k.which == 13
-		console.log 'site input enter pressed'
+		# console.log 'site input enter pressed'
 		gen_passwd()
 
 exports.delay_gen_passwd = delay_gen_passwd = ->
@@ -197,7 +197,7 @@ exports.passwd_onclick = ->
 passphrase_plain_text = false
 
 toggle_passphrase = ->
-	console.log 'toggle_passphrase'
+	# console.log 'toggle_passphrase'
 	pp = $('#passphrase')
 	val = pp.val()
 	tabindex = pp.prop 'tabindex'
@@ -268,10 +268,12 @@ set_tabindex = ->
 exports.init = init = ->
 	console.log 'ui init'
 
+	# Popover is persistent in Safari extension, so have to reset site option state
+	site_option_state = OPTION_STATE.NOT_FOUND
+
 	stored_salt = util.storage.get_salt()
 	$('#salt').val stored_salt if stored_salt?
-	if is_chromeext?
-		console.log 'in chromeext'
+	if is_chromeext? || is_safariext?
 		load_default_options()
 	else
 		# load_default_site_options will set tab index

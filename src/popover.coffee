@@ -6,28 +6,30 @@ ui = require './ui'
 clear_input = ->
 	$('#passphrase').val ''
 	$('#username').val ''
+	$('#site').val ''
 	$('#passwd').val ''
 
-pp_input = $('#passphrase')
-
+# Clear passphrase soon after popover is not showing.
 validateHandler = (event) ->
 	return unless event.target.identifier == "mypass"
 	# console.log 'validate'
-	# clear passphrase for safety
-	if pp_input.val() != ''
+	if $('#passphrase').val() != ''
 		clear_input()
+	# remove listener to avoid calling again
+	safari.application.removeEventListener("validate", validateHandler, true)
 
 popoverHandler = (event) ->
 	clear_input()
 	tab = safari.application.activeBrowserWindow.activeTab
-	console.log "MyPass popover on #{tab.url}"
-	return unless tab.url
-	site = util.parse_site tab.url
-	$('#site').val site
+	# console.log "popover on #{tab.url}"
+	if tab.url
+		site = util.parse_site tab.url
+		$('#site').val site
 	ui.init()
+	# TODO check validate event will not trigger when we focus in the popover
+	safari.application.addEventListener("validate", validateHandler, true)
 
 safari.application.addEventListener("popover", popoverHandler, true);
-safari.application.addEventListener("validate", validateHandler, true)
 
 init = ->
 	$('#site').on 'input', ui.site_update
@@ -45,4 +47,3 @@ init = ->
 	return
 
 $(document).on('DOMContentLoaded', init)
-

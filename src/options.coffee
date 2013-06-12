@@ -1,3 +1,21 @@
+if safari? && safari.extension?
+	window.is_safariext = true
+else if chrome? && chrome.storage?
+	window.is_chromeext = true
+
+# TODO site options loading does not work for Safari extension now.
+#
+# For Safari 6, the options page is neither global or popover page, so it does
+# not have access to the safari.application and safari.extension. Thus:
+#
+# - Options page can't use safari settings directly
+# - Options page has it's own local storage, but it want to read popover
+#   page's local storage
+#
+# One solution to this problem is to let global page to manage storage and
+# respond to message sent by ohter pages. But this is awkward. So I decided to
+# wait Safari 7 and see if there will be new API to handle this.
+
 {config} = require './lib/config'
 ui = require './ui'
 util = require './lib/util'
@@ -5,9 +23,9 @@ util = require './lib/util'
 load_all_site_options = ->
 	site_opt = $('#site-opt')
 	# pass null to get all stored objects
-	chrome.storage.sync.get null, (items) ->
+	util.storage.load_all_site_options (items) ->
 		for site, optjson of items
-			continue if site == config.options_key
+			continue if site == config.options_key || site == config.salt_key
 			# console.log "#{site} #{optjson}"
 			opt = JSON.parse optjson
 			site_opt.append "<tr id='#{site}'>" +
@@ -30,14 +48,9 @@ remove_site_option = ->
 	if btn.html() == 'del'
 		btn.html 'ok?'
 		return
-	chrome.storage.sync.remove site, ->
-		if chrome.runtime.lastError?
-			alert "Error removing option for #{site}: #{chrome.runtime.lastError}"
-			return
-		console.log "Remove options for #{site}"
-		# site may contain dot, so we can't use class#id as selector
-		$("tbody#site-opt tr[id='#{site}']").remove()
-		return
+	util.storage.del site
+	# site may contain dot, so we can't use class#id as selector
+	$("tbody#site-opt tr[id='#{site}']").remove()
 	return
 
 $ ->

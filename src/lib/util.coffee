@@ -76,6 +76,23 @@ chrome_storage_get = (key, cb) ->
 	)
 	return
 
+chrome_storage_del = (site) ->
+	chrome.storage.sync.remove site, ->
+		if chrome.runtime.lastError?
+			alert "Error removing option for #{site}: #{chrome.runtime.lastError}"
+			return
+		console.log "Removed options for #{site}"
+
+chrome_storage_load_all_sites = (cb) ->
+	chrome.storage.sync.get null, (items) ->
+		# Chrome only stores options_key in sync storage
+		sites = (site for site, _ of items when site != config.options_key)
+		cb sites
+
+chrome_storage_load_all_site_options = (cb) ->
+	chrome.storage.sync.get null, (items) ->
+		cb items
+
 local_storage_set = (obj, msg, show_note = true) ->
 	for key, value of obj
 		localStorage[key] = value
@@ -89,17 +106,16 @@ local_storage_get = (key, cb) ->
 	else
 		cb null
 
-# Note salt is stored in local storage, options are stored in Chrome synced storage.
-# Need to filter them out when loading all sites, otherwise will cause JSON parse error.
-
-chrome_storage_load_all_sites = (cb) ->
-	chrome.storage.sync.get null, (items) ->
-		sites = (site for site, _ of items when site != config.options_key)
-		cb sites
+local_storage_del = (site) ->
+	delete localStorage[site]
+	console.log "Removed options for #{site}"
 
 local_storage_load_all_sites = (cb) ->
-	sites = (site for site, _ of localStorage when site != config.salt_key)
+	sites = (site for site, _ of localStorage when site != config.salt_key && site != config.options_key)
 	cb sites
+
+local_storage_load_all_site_options = (cb) ->
+	cb localStorage
 
 exports.storage =
 	get_salt: ->
@@ -111,12 +127,16 @@ if is_chromeext?
 	console.log 'setting storage to chrome.storage.sync'
 	exports.storage.set = chrome_storage_set
 	exports.storage.get = chrome_storage_get
+	exports.storage.del = chrome_storage_del
 	exports.storage.load_all_sites = chrome_storage_load_all_sites
+	exports.storage.load_all_site_options = chrome_storage_load_all_site_options
 else
 	console.log 'setting storage to localStorage'
 	exports.storage.set = local_storage_set
 	exports.storage.get = local_storage_get
+	exports.storage.del = local_storage_del
 	exports.storage.load_all_sites = local_storage_load_all_sites
+	exports.storage.load_all_site_options = local_storage_load_all_site_options
 
 #################################################
 # Notification
