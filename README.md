@@ -1,4 +1,6 @@
-**MyPass** is a tool to generate *different passwords for different sites* with a given passphrase. It uses the same algorithm with [One Shall Pass](https://oneshallpass.com/) (1SP). You can specify options like password length, number of symbols, etc.
+**MyPass** is a tool to generate *different passwords for different sites* with a given passphrase. It uses the password generation algorithm of [One Shall Pass](https://oneshallpass.com/) (1SP). You can specify options like password length, number of symbols, etc.
+
+Note: **MyPass does NOT ignore spaces in your passphrase**, this is different from 1SP.
 
 MyPass is implemented as:
 
